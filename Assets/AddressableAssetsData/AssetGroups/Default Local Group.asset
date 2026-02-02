@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bbb281ee3bf0b054c82ac2347e9e782c, type: 3}
+  m_Name: Default Local Group
+  m_EditorClassIdentifier: 
+  m_GroupName: Default Local Group
+  m_Data:
+    m_SerializedData: []
+  m_GUID: be945c3c82d6b7042a3a9ba8a2bfca39
+  m_SerializeEntries:
+  - m_GUID: ed041cd12d50ae34ea82a071dfeaa92b
+    m_Address: Assets/04_Art/01_player/sunnyside_world_chatacter_anim_v0.07_condensed.aseprite
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  m_ReadOnly: 0
+  m_Settings: {fileID: 11400000, guid: b0e309f5b398f5347811ead68682ca16, type: 2}
+  m_SchemaSet:
+    m_Schemas:
+    - {fileID: 11400000, guid: 61297e83c36b38c47b91b4a15f578aad, type: 2}
+    - {fileID: 11400000, guid: 4ef93263ab8117441a7d1d0e3936ded3, type: 2}
