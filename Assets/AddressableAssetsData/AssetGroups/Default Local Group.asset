@@ -16,12 +16,7 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: be945c3c82d6b7042a3a9ba8a2bfca39
-  m_SerializeEntries:
-  - m_GUID: ed041cd12d50ae34ea82a071dfeaa92b
-    m_Address: Assets/04_Art/01_player/sunnyside_world_chatacter_anim_v0.07_condensed.aseprite
-    m_ReadOnly: 0
-    m_SerializedLabels: []
-    FlaggedDuringContentUpdateRestriction: 0
+  m_SerializeEntries: []
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: b0e309f5b398f5347811ead68682ca16, type: 2}
   m_SchemaSet:
