@@ -22,7 +22,7 @@ public struct InputArgs
 }
 
 
-public class InputManager : Singleton<InputManager>, PlayerInputSystem.IPlayerActions
+public class InputManager : Singleton<InputManager>, PlayerInputSystem.IPlayerActions, IEventAdd
 {
     public class MoveEvent : GameAction<MoveArgs> { }
     public class DashEvent : GameAction<InputState> { }
@@ -44,8 +44,7 @@ public class InputManager : Singleton<InputManager>, PlayerInputSystem.IPlayerAc
 
     private void Start()
     {
-        EventManager.Instance.AddEvent<MoveEvent>(moveEvent);
-        EventManager.Instance.AddEvent<DashEvent>(dashEvent);
+        EventAdd();
     }
 
     /// <summary>
@@ -104,5 +103,11 @@ public class InputManager : Singleton<InputManager>, PlayerInputSystem.IPlayerAc
         if (context.started) state = InputState.Started;
         else if (context.canceled) state = InputState.Canceled;
         dashEvent.Invoke(state);
+    }
+
+    public void EventAdd()
+    {
+        EventManager.Instance.AddEvent<MoveEvent>(moveEvent);
+        EventManager.Instance.AddEvent<DashEvent>(dashEvent);
     }
 }

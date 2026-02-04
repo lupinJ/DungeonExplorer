@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -44,7 +43,24 @@ public class AssetManager : Singleton<AssetManager>
     // [Key: 레이블] - 레이블에 속한 주소 리스트
     private readonly Dictionary<string, List<string>> labelDic = new();
 
-    
+    /// <summary>
+    /// 이미 로드된 에셋을 가져옴(없으면 
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <param name="key"></param>
+    /// <returns></returns>
+    public bool TryGetAsset<T>(string key, out T result) where T : Object
+    {
+        result = null;
+
+        if (assetDic.TryGetValue(key, out var data))
+        {
+            result = data.GetResult() as T;
+            if (result != null)
+                return true;
+        }
+        return false;
+    }
     /// <summary>
     /// Asset 로드
     /// </summary>
@@ -65,6 +81,7 @@ public class AssetManager : Singleton<AssetManager>
         try
         {
             await handle.ToUniTask(cancellationToken: ct);
+            handle.WaitForCompletion();
 
             if (handle.Status == AsyncOperationStatus.Succeeded)
             {
@@ -130,7 +147,7 @@ public class AssetManager : Singleton<AssetManager>
         if (!labelDic.TryGetValue(label, out var keys))
             return;
 
-        foreach (var key in keys)
+        foreach (var key in keys.ToList())
         {
             Unload(key);
         }

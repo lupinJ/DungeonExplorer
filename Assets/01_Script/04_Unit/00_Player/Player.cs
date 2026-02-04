@@ -6,15 +6,16 @@ using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Player : Unit
+public class Player : Unit, IInItable
 {
+    public Inventory inventory;
     Movement movement;
     CancellationTokenSource enableToken;
 
     protected override void Awake()
     {
         base.Awake();
-
+        inventory = new Inventory();
         movement = new Movement();
         movement.Speed = 5f;
     }
@@ -30,14 +31,6 @@ public class Player : Unit
     {
         enableToken.Cancel();
         enableToken.Dispose();
-    }
-
-    async UniTaskVoid Start()
-    {
-        await UniTask.NextFrame(this.destroyCancellationToken);
-
-        EventManager.Instance.Subscribe<InputManager.MoveEvent, MoveArgs>(Move);
-        EventManager.Instance.Subscribe<InputManager.DashEvent, InputState>(Dash);
     }
 
     private void OnDestroy()
@@ -116,5 +109,11 @@ public class Player : Unit
 
         movement.Speed -= 5f;
         anim.SetBool("IsDash", false);
+    }
+
+    public void Initialize(InitData data = default)
+    {
+        EventManager.Instance.Subscribe<InputManager.MoveEvent, MoveArgs>(Move);
+        EventManager.Instance.Subscribe<InputManager.DashEvent, InputState>(Dash);
     }
 }

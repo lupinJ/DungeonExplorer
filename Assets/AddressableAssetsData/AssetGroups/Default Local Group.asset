@@ -16,7 +16,31 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: be945c3c82d6b7042a3a9ba8a2bfca39
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 0c4aa6040b5be2a4cb9e3dea0bd71dc2
+    m_Address: Assets/06_Data/ScriptableObject/ItemDataSO/Sword.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2b8bcd937b20f084c8de9335adf34314
+    m_Address: Assets/02_Prefab/Player/Player.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - GameSceneGame
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4b5810310ca7c8e44ac768775873b957
+    m_Address: Assets/02_Prefab/UI/InventoryUI.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - GameSceneUI
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ced89abd117a74e47a27287712958651
+    m_Address: Assets/06_Data/ScriptableObject/ItemDataSO/None.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemData
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: b0e309f5b398f5347811ead68682ca16, type: 2}
   m_SchemaSet:

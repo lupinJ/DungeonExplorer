@@ -11,6 +11,11 @@ public interface ISubscribble<T> : IEvent
     void UnSubscribe(Action<T> listener);
 }
 
+public interface IEventAdd
+{
+    public void EventAdd();
+}
+
 public abstract class GameAction<T> : ISubscribble<T>
 {
     private event Action<T> action;
@@ -23,11 +28,11 @@ public abstract class GameAction<T> : ISubscribble<T>
 public class EventManager : Singleton<EventManager>
 {
     // Action
-    Dictionary<Type, IEvent> eventDic;
+    Dictionary<Type, IEvent> eventDic = new();
 
     protected override void Init()
     {
-        eventDic = new Dictionary<Type, IEvent>();
+        
     }
     private void OnDestroy()
     {
@@ -73,6 +78,7 @@ public class EventManager : Singleton<EventManager>
         {
             if (eventBase is ISubscribble<TData> action)
             {
+                action.UnSubscribe(listener);
                 action.Subscribe(listener);
             }
         }

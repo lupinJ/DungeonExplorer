@@ -1,78 +1,146 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using System.Xml.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static UnityEngine.Rendering.DebugUI;
 
 public class UIManager : Singleton<UIManager>
 {
     
     public Transform canvas; //캔버스의 위치
 
-    public Dictionary<string, PopupUI> popupUIDictionary = new();
-    
-    protected override void Init()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
+    public Dictionary<string, UIBase> UIDic = new();
 
     public void ShowPanel(string uiName) 
     {
-        if(popupUIDictionary.TryGetValue(uiName, out PopupUI popupUI))
+        if(UIDic.TryGetValue(uiName, out UIBase popupUI))
         {
-            popupUI.ShowPanel();
+            popupUI.gameObject.SetActive(true);
             return;
         }
-        
-        Debug.LogWarning($"UIManager.ShowPanel() : {uiName} is null");
+
+        if(AssetManager.Instance.TryGetAsset<GameObject>(uiName, out GameObject obj))
+        {
+            UIBase uiBase = Instantiate(obj).GetComponent<UIBase>() as UIBase;
+            
+            if(uiBase != null)
+            {
+                UIDic.Add(uiName, uiBase);
+                uiBase.transform.parent = canvas;
+                uiBase.gameObject.SetActive(true);
+            }
+            else
+            {
+                Debug.Log($"is not UIBase {uiName}");
+            }
+                
+        }
+        else
+        {
+            Debug.Log($"failed Get Asset {uiName}");
+        }
+
     }
 
     public void HidePanel(string uiName) 
     {
-        if(popupUIDictionary.TryGetValue(uiName, out PopupUI popupUI))
+        if(UIDic.TryGetValue(uiName, out UIBase popupUI))
         {
-            popupUI.HidePanel();
+            popupUI.gameObject.SetActive(false);
             return;
         }
 
         Debug.LogWarning($"UIManager.HidePanel() : {uiName} is null");
     }
 
-    public PopupUI GetPanel(string uiName)
+    /// <summary>
+    /// UI 반환 함수
+    /// </summary>
+    /// <param name="uiName"></param>
+    /// <param name="panel"></param>
+    /// <returns></returns>
+    public bool TryGetPanel(string uiName, out UIBase panel)
     {
-        if(popupUIDictionary.TryGetValue(uiName, out PopupUI popupUI))
+        UIBase uiBase = null;
+
+        if(UIDic.TryGetValue(uiName, out uiBase))
         {
-            return popupUI;
+            panel = uiBase;
+            return true;
         }
 
-        Debug.LogWarning($"UIManager.GetPanel() : {uiName} is null");
-        return null;
-    }
-
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-    {
-        canvas = GameObject.Find("PopupCanvas").transform;
-        
-        if(canvas == null)
+        if (AssetManager.Instance.TryGetAsset<GameObject>(uiName, out GameObject obj))
         {
-            Debug.LogWarning($"UIManager.OnSceneLoaded() : canvas is null");
-        }
+            uiBase = Instantiate(obj).GetComponent<UIBase>() as UIBase;
 
-        PopupUI[] popupUIs = canvas.GetComponentsInChildren<PopupUI>(true); 
-        popupUIDictionary.Clear();
-        
-        foreach (PopupUI popupUI in popupUIs)
-        {
-
-            if (!popupUIDictionary.ContainsKey(popupUI.name))
+            if (uiBase != null)
             {
-                popupUIDictionary.Add(popupUI.name, popupUI); 
+                UIDic.Add(uiName, uiBase);
+                uiBase.transform.parent = canvas;
+                panel = uiBase;
+                return true;
             }
             else
             {
-                Debug.LogWarning($"중복 키 : {popupUI.name}");
+                Debug.Log($"is not UIBase {uiName}");
+            }
+
+        }
+        else
+        {
+            Debug.Log($"failed Get Asset {uiName}");
+        }
+
+        panel = uiBase;    
+        return false;
+    }
+
+    /// <summary>
+    /// Scene에 진입 시 UI 미리 캐싱
+    /// </summary>
+    /// <param name="list"></param>
+    public void OnSceneLoadedCreate(List<string> list)
+    {
+        foreach(string key in list)
+        {
+            if(AssetManager.Instance.TryGetAsset<GameObject>(key, out GameObject obj))
+            {
+                UIBase uiBase = Instantiate(obj).GetComponent<UIBase>() as UIBase;
+                
+                if (uiBase != null)
+                {
+                    uiBase.transform.SetParent(canvas, false);
+                    UIDic.Add(key, uiBase);
+                    
+                }
+                else
+                {
+                    Debug.Log($"is not UIBase {key}");
+                }
+            }
+            else
+            {
+                Debug.Log($"failed Get Asset {key}");
             }
         }
-        
-        
+    }
+
+    /// <summary>
+    /// UI 전체 초기화
+    /// </summary>
+    public void OnSceneLoadedInit()
+    {
+        foreach(var pair in UIDic)
+        {
+            if(pair.Value is IInItable initAction)
+            {
+                initAction.Initialize();
+            }
+
+        }
     }
 }

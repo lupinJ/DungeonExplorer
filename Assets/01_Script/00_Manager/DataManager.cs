@@ -1,21 +1,25 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using UnityEngine;
 
 [System.Serializable]
 public class SaveData
 {
-    public List<int> score = new List<int>();
-
+    public List<ItemId> items;
     public int coin;
-    public int jewel;
+
 }
 public class DataManager : Singleton<DataManager>
 {
     string path;
     [SerializeField]
     SaveData saveData;
+
+    int maxInventory = 24; // 임시
+    Dictionary<string, ItemDataSO> itemTable = new();
 
     public SaveData Data {  
         get { return saveData; }
@@ -24,17 +28,32 @@ public class DataManager : Singleton<DataManager>
     protected override void Init()
     {
         path = Path.Combine(Application.dataPath, "database.json");
-        JsonLoad();
+    }
+
+    public bool TryGetItemData(string key, out ItemDataSO item)
+    {
+        if (itemTable.TryGetValue(key, out ItemDataSO so))
+        {
+            item = so;
+            return true;
+        }
+        item = null;
+        return false;
     }
 
     public void JsonLoad()
     {
         SaveData saveData = new SaveData();
+        
 
         if (!File.Exists(path))
         {
+            this.saveData.items = new List<ItemId>(maxInventory);
+
+            for (int i = 0; i < maxInventory; i++)
+                this.saveData.items.Add(ItemId.None);
+
             this.saveData.coin = 0;
-            this.saveData.jewel = 9999;
             SaveData();
         }
         else
@@ -44,13 +63,7 @@ public class DataManager : Singleton<DataManager>
 
             if (saveData != null)
             {
-                for (int i = 0; i < saveData.score.Count; i++)
-                {
-                    this.saveData.score.Add(saveData.score[i]);
-                }
-               
-                this.saveData.coin = saveData.coin;
-                this.saveData.jewel = saveData.jewel;
+                this.saveData = saveData;
             }
         }
     
@@ -58,33 +71,24 @@ public class DataManager : Singleton<DataManager>
 
     public void SaveData() 
     {
-        SaveData saveData = new SaveData();
-
-        for (int i = 0; i < this.saveData.score.Count; i++)
-        {
-            saveData.score.Add(this.saveData.score[i]);
-        }
-
-        
-
-        saveData.coin = this.saveData.coin;
-        saveData.jewel = this.saveData.jewel;
-
-        string json = JsonUtility.ToJson(saveData, true);
-
+        string json = JsonUtility.ToJson(this.saveData, true);
         File.WriteAllText(path, json);
     }
 
-    public void AddResult(int score, int coin)
+    public async UniTask LoadItemDataAsync(CancellationToken ct)
     {
-        saveData.coin += coin;
-        saveData.score.Add(score);
-
-        saveData.score.Sort((a, b) => b.CompareTo(a));
+        // SO Data 로드
+        List<string> Itemkeys = await AssetManager.Instance.LoadAssetsByLabelAsync("ItemData", ct);
         
-        if(saveData.score.Count > 4)
+        // 딕셔너리에 저장
+        foreach (string key in Itemkeys)
         {
-            saveData.score.RemoveAt(saveData.score.Count - 1);
+            if(AssetManager.Instance.TryGetAsset<ItemDataSO>(key, out ItemDataSO item))
+            {
+                if (!itemTable.ContainsKey(key))
+                    itemTable.Add(key, item);
+            }
         }
+
     }
 }
