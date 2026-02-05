@@ -45,7 +45,6 @@ public class UIManager : Singleton<UIManager>
         }
 
     }
-
     public void HidePanel(string uiName) 
     {
         if(UIDic.TryGetValue(uiName, out UIBase popupUI))
@@ -140,7 +139,6 @@ public class UIManager : Singleton<UIManager>
             {
                 initAction.Initialize();
             }
-
         }
     }
 }

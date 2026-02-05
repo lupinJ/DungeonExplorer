@@ -25,6 +25,7 @@ public class InventoryUI : PopupUI, IInItable
             slots[i].index = i;
             slots[i].onItemSwap += SlotSwap;
             slots[i].onItemClicked += SlotClick;
+            slots[i].onItemDrop += SlotDrop;
         }
 
         OnInventoryChanged(this.inventory);
@@ -38,6 +39,10 @@ public class InventoryUI : PopupUI, IInItable
     public void SlotClick(int index)
     {
         inventory.UseItem(index);
+    }
+    public void SlotDrop(int index)
+    {
+        inventory.DropItem(index);
     }
 
     void OnInventoryChanged(Inventory inventory) 

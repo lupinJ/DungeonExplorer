@@ -9,13 +9,15 @@ public class Inventory
     InventoryChangedEvent inventoryChangedEvent;
 
     public List<Item> items;
-    int capacity;
+    public int capacity;
+    ItemDataSO none;
 
     public Inventory()
     {
         items = new List<Item>();
         inventoryChangedEvent = new InventoryChangedEvent();
         EventManager.Instance.AddEvent<InventoryChangedEvent>(inventoryChangedEvent);
+        DataManager.Instance.TryGetItemData("Assets/06_Data/ScriptableObject/ItemDataSO/None.asset", out none);
         FillInventory(null);
     }
 
@@ -25,7 +27,9 @@ public class Inventory
         ch = DataManager.Instance.TryGetItemData("Assets/06_Data/ScriptableObject/ItemDataSO/Sword.asset", out ItemDataSO item2);
         if (!ch)
             return;
-
+        items.Add(new(item2));
+        items.Add(new(item2));
+        items.Add(new(item2));
         for (int i = 0; i < 20; i++)
             items.Add(new(item1));
     }
@@ -36,16 +40,25 @@ public class Inventory
     /// <param name="item"></param>
     public void AddItem(Item item)
     {
+        
+
         inventoryChangedEvent.Invoke(this);
     }
 
     public void DropItem(int index)
     {
+        if (index < 0 || index >= items.Count)
+            return;
+
+        items[index] = new Item(none);
         inventoryChangedEvent.Invoke(this);
     }
 
     public void UseItem(int index)
     {
+        if (index < 0 || index >= items.Count)
+            return;
+
         items[index].Use();
         inventoryChangedEvent.Invoke(this);
     }

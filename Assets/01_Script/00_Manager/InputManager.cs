@@ -22,7 +22,7 @@ public struct InputArgs
 }
 
 
-public class InputManager : Singleton<InputManager>, PlayerInputSystem.IPlayerActions, IEventAdd
+public class InputManager : Singleton<InputManager>, PlayerInputSystem.IPlayerActions
 {
     public class MoveEvent : GameAction<MoveArgs> { }
     public class DashEvent : GameAction<InputState> { }

@@ -18,5 +18,5 @@ public abstract class Unit : MonoBehaviour
 
 public interface IHitable
 {
-    public void Hit();
+    public void Hit(int atk);
 }

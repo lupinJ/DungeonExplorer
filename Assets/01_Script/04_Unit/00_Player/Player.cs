@@ -6,18 +6,27 @@ using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class Player : Unit, IInItable
+public class Player : Unit, IInItable, IHitable
 {
     public Inventory inventory;
+
+    Stat stat;
     Movement movement;
     CancellationTokenSource enableToken;
 
     protected override void Awake()
     {
         base.Awake();
+
+        stat = new Stat();
         inventory = new Inventory();
         movement = new Movement();
         movement.Speed = 5f;
+    }
+    public void Initialize(InitData data = default)
+    {
+        EventManager.Instance.Subscribe<InputManager.MoveEvent, MoveArgs>(Move);
+        EventManager.Instance.Subscribe<InputManager.DashEvent, InputState>(Dash);
     }
 
     private void OnEnable()
@@ -38,6 +47,7 @@ public class Player : Unit, IInItable
         if(EventManager.Instance != null)
         {
             EventManager.Instance.Unsubscribe<InputManager.MoveEvent, MoveArgs>(Move);
+            EventManager.Instance.Unsubscribe<InputManager.DashEvent, InputState>(Dash);
         }        
     }
 
@@ -92,6 +102,13 @@ public class Player : Unit, IInItable
 
     public void Dash(InputState state)
     {
+        if (state != InputState.Started)
+            return;
+
+        if (stat.Mp < 10)
+            return;
+        stat.Mp -= 10;
+
         DashAsync().Forget();
     }
 
@@ -103,17 +120,16 @@ public class Player : Unit, IInItable
     {
         
         anim.SetBool("IsDash", true);
-        movement.Speed += 5f;
+        movement.Speed += 12f;
 
         await UniTask.WaitForSeconds(0.2f, false, PlayerLoopTiming.Update, this.destroyCancellationToken);
 
-        movement.Speed -= 5f;
+        movement.Speed -= 12f;
         anim.SetBool("IsDash", false);
     }
 
-    public void Initialize(InitData data = default)
+    public void Hit(int atk)
     {
-        EventManager.Instance.Subscribe<InputManager.MoveEvent, MoveArgs>(Move);
-        EventManager.Instance.Subscribe<InputManager.DashEvent, InputState>(Dash);
+        stat.Hp -= atk;
     }
 }

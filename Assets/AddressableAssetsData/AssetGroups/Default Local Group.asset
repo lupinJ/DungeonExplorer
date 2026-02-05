@@ -35,6 +35,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - GameSceneUI
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cca8e05ff82b8e04f8cd20d37e95dd54
+    m_Address: Assets/02_Prefab/UI/HpBarUI.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - GameSceneUI
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ced89abd117a74e47a27287712958651
     m_Address: Assets/06_Data/ScriptableObject/ItemDataSO/None.asset
     m_ReadOnly: 0

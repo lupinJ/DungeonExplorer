@@ -43,7 +43,7 @@ public class SlotUI : UIBase, IPointerClickHandler, IPointerDownHandler, IPointe
             text.text = "";
             return;
         }
-        else if (item.data.itemName == "None")
+        else if (item.data.id == ItemId.None)
         {
             ItemImage.enabled = false;
         }
@@ -83,11 +83,16 @@ public class SlotUI : UIBase, IPointerClickHandler, IPointerDownHandler, IPointe
     /// <param name="eventData"></param>
     public void OnPointerUp(PointerEventData eventData)
     {
-        
         if (this.item == null)
             return;
+
         if (eventData.pointerEnter == null)
+        {
+            if(!(item.data.id == ItemId.None))
+                onItemDrop.Invoke(index);
+            Debug.Log($"Slot UI : {index}");
             return;
+        }
         
         SlotUI otherSlot = eventData.pointerEnter.gameObject.GetComponent<SlotUI>();
 

@@ -11,11 +11,6 @@ public interface ISubscribble<T> : IEvent
     void UnSubscribe(Action<T> listener);
 }
 
-public interface IEventAdd
-{
-    public void EventAdd();
-}
-
 public abstract class GameAction<T> : ISubscribble<T>
 {
     private event Action<T> action;
