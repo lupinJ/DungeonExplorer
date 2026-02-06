@@ -18,4 +18,8 @@ public class Item
             return;
         Debug.Log($"Item {data.itemName} is used");
     }
+
+    public virtual void PickUp() { }
+    public virtual void Drop() { }
+
 }

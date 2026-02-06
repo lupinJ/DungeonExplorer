@@ -2,11 +2,10 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.Loading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public struct InitData { }
+public interface InitData { }
 
 public interface IInItable
 {
@@ -25,9 +24,19 @@ public class LoadManager : Singleton<LoadManager>
         Loading(scene.name).Forget();
     }
 
+    public void OnSceneUnLoaded()
+    {
+        UnLoading(SceneManager.GetActiveScene().name).Forget();
+    }
+
     private async UniTaskVoid FirstLoading()
     {
         
+    }
+
+    private async UniTaskVoid FirstUnLoading()
+    {
+
     }
 
     private async UniTaskVoid Loading(string name)
@@ -49,4 +58,15 @@ public class LoadManager : Singleton<LoadManager>
         // 4. 게임을 시작한다.
     }
     
+    private async UniTaskVoid UnLoading(string name)
+    {
+        AssetManager.Instance.UnloadByLabel($"{name}UI");
+        AssetManager.Instance.UnloadByLabel($"{name}Game");
+
+    }
+
+    private void OnApplicationQuit()
+    {
+        FirstUnLoading().Forget();
+    }
 }

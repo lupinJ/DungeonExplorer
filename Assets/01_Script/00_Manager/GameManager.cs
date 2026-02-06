@@ -9,7 +9,7 @@ public class GameManager : Singleton<GameManager>
     public void OnSceneLoadedCreate(List<string> list)
     {
         
-        if(AssetManager.Instance.TryGetAsset<GameObject>(list[0], out GameObject obj))
+        if(AssetManager.Instance.TryGetAsset<GameObject>(AddressKeys.Player, out GameObject obj))
         {
             player = Instantiate(obj).GetComponent<Player>();
         }

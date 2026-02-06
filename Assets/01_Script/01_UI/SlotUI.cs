@@ -25,6 +25,8 @@ public class SlotUI : UIBase, IPointerClickHandler, IPointerDownHandler, IPointe
     public event Action<int> onItemClicked;
     public event Action<int, int> onItemSwap;
     public event Action<int> onItemDrop;
+    public event Action<Item> onDragStart;
+    public event Action onDragEnd;
 
     private void Awake()
     {
@@ -55,12 +57,15 @@ public class SlotUI : UIBase, IPointerClickHandler, IPointerDownHandler, IPointe
         image.sprite = activeImage;
         ItemImage.sprite = item.data.image;
 
-        if (item.data.maxCount == 1)
+        // text 표시
+        if (item is CountableItem cItem)
+        {
+            text.text = $"{cItem.Count}";
+        }
+        else if (item.data.maxCount == 1) // 무기일 경우 E 표시 예정
             text.text = "";
         else
-        {
-            text.text = $"{item.data.maxCount}";
-        }
+            text.text = "";
 
     }
     /// <summary>
@@ -75,6 +80,12 @@ public class SlotUI : UIBase, IPointerClickHandler, IPointerDownHandler, IPointe
     public void OnPointerDown(PointerEventData eventData)
     {
         //down 되었을 시
+        if (item == null)
+            return;
+        if (item.data.id == ItemId.None)
+            return;
+
+        onDragStart.Invoke(this.item);
     }
 
     /// <summary>
@@ -86,11 +97,12 @@ public class SlotUI : UIBase, IPointerClickHandler, IPointerDownHandler, IPointe
         if (this.item == null)
             return;
 
+        onDragEnd.Invoke();
+
         if (eventData.pointerEnter == null)
         {
             if(!(item.data.id == ItemId.None))
                 onItemDrop.Invoke(index);
-            Debug.Log($"Slot UI : {index}");
             return;
         }
         
@@ -107,12 +119,17 @@ public class SlotUI : UIBase, IPointerClickHandler, IPointerDownHandler, IPointe
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        
+        image.color = new Color(1f, 1f, 0.64f, 1f);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        
+        image.color = Color.white;
+    }
+
+    private void OnDisable()
+    {
+        image.color = Color.white;
     }
 }
 

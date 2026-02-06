@@ -23,6 +23,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - ItemData
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 14edf4fe490cf3140a0192b58300fc66
+    m_Address: Assets/02_Prefab/Item/DropItem.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - GameSceneGame
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2b8bcd937b20f084c8de9335adf34314
     m_Address: Assets/02_Prefab/Player/Player.prefab
     m_ReadOnly: 0

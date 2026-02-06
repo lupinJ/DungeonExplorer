@@ -22,16 +22,19 @@ public struct InputArgs
 }
 
 
-public class InputManager : Singleton<InputManager>, PlayerInputSystem.IPlayerActions
+public class InputManager : Singleton<InputManager>, 
+    PlayerInputSystem.IPlayerActions, 
+    PlayerInputSystem.IGameUIActions
 {
     public class MoveEvent : GameAction<MoveArgs> { }
     public class DashEvent : GameAction<InputState> { }
+    public class InteractEvent : GameAction<InputState> { }
 
     PlayerInputSystem input;
     MoveEvent moveEvent;
     DashEvent dashEvent;
+    InteractEvent interactEvent;
 
-    
     /// <summary>
     /// ΩÃ±€≈Ê √ ±‚»≠ «‘ºˆ
     /// </summary>
@@ -40,11 +43,18 @@ public class InputManager : Singleton<InputManager>, PlayerInputSystem.IPlayerAc
         input = new PlayerInputSystem();
         moveEvent = new MoveEvent();
         dashEvent = new DashEvent();
+        interactEvent = new InteractEvent();
     }
 
     private void Start()
     {
         EventAdd();
+    }
+    public void EventAdd()
+    {
+        EventManager.Instance.AddEvent<MoveEvent>(moveEvent);
+        EventManager.Instance.AddEvent<DashEvent>(dashEvent);
+        EventManager.Instance.AddEvent<InteractEvent>(interactEvent);
     }
 
     /// <summary>
@@ -56,18 +66,25 @@ public class InputManager : Singleton<InputManager>, PlayerInputSystem.IPlayerAc
         {
             EventManager.Instance.RemoveEvent<MoveEvent>();
             EventManager.Instance.RemoveEvent<DashEvent>();
+            EventManager.Instance.RemoveEvent<InteractEvent>();
         }
 
     }
 
     private void OnEnable()
     {
+        input.GameUI.Enable();
+        input.GameUI.SetCallbacks(this);
+
         input.Player.Enable();
         input.Player.SetCallbacks(this);
     }
 
     private void OnDisable()
     {
+        input.GameUI.Disable();
+        input.GameUI.RemoveCallbacks(this);
+
         input.Player.Disable();
         input.Player.RemoveCallbacks(this);
     }
@@ -77,9 +94,13 @@ public class InputManager : Singleton<InputManager>, PlayerInputSystem.IPlayerAc
         
     }
 
-    public void OnInteractive(InputAction.CallbackContext context)
+    public void OnInteract(InputAction.CallbackContext context)
     {
-        
+        InputState state = InputState.Performed;
+
+        if (context.started) state = InputState.Started;
+        else if (context.canceled) state = InputState.Canceled;
+        interactEvent.Invoke(state);
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -105,9 +126,20 @@ public class InputManager : Singleton<InputManager>, PlayerInputSystem.IPlayerAc
         dashEvent.Invoke(state);
     }
 
-    public void EventAdd()
+    public void OnInventory(InputAction.CallbackContext context)
     {
-        EventManager.Instance.AddEvent<MoveEvent>(moveEvent);
-        EventManager.Instance.AddEvent<DashEvent>(dashEvent);
+        if (!context.started)
+            return;
+
+        if (UIManager.Instance.TryGetPanel(AddressKeys.InventoryUI, out UIBase uiBase))
+        {
+            PopupUI inventory = uiBase as PopupUI;
+            if (inventory.IsActive)
+                inventory.HidePanel();
+            else
+                inventory.ShowPanel();
+        }
     }
+
+  
 }

@@ -1,18 +1,22 @@
 using Cysharp.Threading.Tasks;
-using Cysharp.Threading.Tasks.CompilerServices;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-using Unity.VisualScripting;
 using UnityEngine;
+
+interface IInteractable {
+    public void Interact();
+}
 
 public class Player : Unit, IInItable, IHitable
 {
     public Inventory inventory;
 
-    Stat stat;
-    Movement movement;
-    CancellationTokenSource enableToken;
+    Stat stat; // player 스텟
+    Movement movement; // 움직임 계산
+    CancellationTokenSource enableToken; // 토큰
+
+    public float interactRange = 1.0f; // 상호작용 범위
 
     protected override void Awake()
     {
@@ -27,10 +31,13 @@ public class Player : Unit, IInItable, IHitable
     {
         EventManager.Instance.Subscribe<InputManager.MoveEvent, MoveArgs>(Move);
         EventManager.Instance.Subscribe<InputManager.DashEvent, InputState>(Dash);
+        EventManager.Instance.Subscribe <InputManager.InteractEvent, InputState>(Interact);
     }
 
     private void OnEnable()
     {
+        enableToken?.Cancel();
+        enableToken?.Dispose();
         enableToken = new CancellationTokenSource();
         FixedMoveAsync(enableToken.Token).Forget();
         LookAtAsync(enableToken.Token).Forget();
@@ -38,8 +45,9 @@ public class Player : Unit, IInItable, IHitable
 
     private void OnDisable()
     {
-        enableToken.Cancel();
-        enableToken.Dispose();
+        enableToken?.Cancel();
+        enableToken?.Dispose();
+        enableToken = null;
     }
 
     private void OnDestroy()
@@ -48,6 +56,7 @@ public class Player : Unit, IInItable, IHitable
         {
             EventManager.Instance.Unsubscribe<InputManager.MoveEvent, MoveArgs>(Move);
             EventManager.Instance.Unsubscribe<InputManager.DashEvent, InputState>(Dash);
+            EventManager.Instance.Unsubscribe<InputManager.InteractEvent, InputState>(Interact);
         }        
     }
 
@@ -112,6 +121,57 @@ public class Player : Unit, IInItable, IHitable
         DashAsync().Forget();
     }
 
+    
+    public void Interact(InputState state)
+    {
+        if (state != InputState.Started)
+            return;
+        
+        LayerMask npcLayer = LayerMask.GetMask("Npc"); 
+
+        // Npc layer 서치
+        Collider2D[] targets = Physics2D.OverlapCircleAll(transform.position, interactRange, npcLayer);
+
+        if (targets.Length == 0) return;
+
+        Collider2D closestTarget = null;
+        float minDistance = float.MaxValue;
+
+        // 거리 계산
+        foreach (var target in targets)
+        {
+            float distance = Vector2.Distance(transform.position, target.transform.position);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closestTarget = target;
+            }
+        }
+
+        // 상호작용 실행
+        if (closestTarget != null)
+        {
+            
+            if (closestTarget.TryGetComponent<IInteractable>(out var interactable))
+            {
+                interactable.Interact();
+            }
+            else
+                Debug.Log($"try failed");
+        }
+    }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        // 원의 색상 설정
+        Gizmos.color = Color.cyan;
+
+        // 현재 오브젝트 위치에 반지름만큼의 원을 그림
+        // OverlapCircle과 동일한 위치, 반지름 값을 넣어줍니다.
+        Gizmos.DrawWireSphere(transform.position, interactRange);
+    }
+#endif
     /// <summary>
     /// player 대쉬 처리
     /// </summary>

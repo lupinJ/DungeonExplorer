@@ -104,7 +104,9 @@ public class UIManager : Singleton<UIManager>
     /// <param name="list"></param>
     public void OnSceneLoadedCreate(List<string> list)
     {
-        foreach(string key in list)
+        UIDic.Clear();
+
+        foreach (string key in list)
         {
             if(AssetManager.Instance.TryGetAsset<GameObject>(key, out GameObject obj))
             {
