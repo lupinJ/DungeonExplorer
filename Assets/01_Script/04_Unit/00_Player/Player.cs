@@ -12,26 +12,36 @@ public class Player : Unit, IInItable, IHitable
 {
     public Inventory inventory;
 
-    Stat stat; // player 스텟
+    PlayerStat stat; // player 스텟
     Movement movement; // 움직임 계산
     CancellationTokenSource enableToken; // 토큰
 
-    public float interactRange = 1.0f; // 상호작용 범위
+    [SerializeField] GameObject weponParent; // 무기 회전 object
+    [SerializeField] Weapon weapon; // 장착한 무기
+
+    float interactRange = 1.0f; // 상호작용 범위
+    bool isFlip = false; // 바라보는 방향
+    Vector3 attackDir;
 
     protected override void Awake()
     {
         base.Awake();
 
-        stat = new Stat();
+        stat = new PlayerStat();
         inventory = new Inventory();
         movement = new Movement();
         movement.Speed = 5f;
+        interactRange = 1.0f;
+        isFlip = false;
     }
     public void Initialize(InitData data = default)
     {
         EventManager.Instance.Subscribe<InputManager.MoveEvent, MoveArgs>(Move);
         EventManager.Instance.Subscribe<InputManager.DashEvent, InputState>(Dash);
         EventManager.Instance.Subscribe <InputManager.InteractEvent, InputState>(Interact);
+        EventManager.Instance.Subscribe<InputManager.AttackEvent, InputState>(Attack);
+
+        stat.onDie += PlayerDie;
     }
 
     private void OnEnable()
@@ -74,26 +84,45 @@ public class Player : Unit, IInItable, IHitable
     }
 
     /// <summary>
-    /// 마우스 방향으로 flip
+    /// 보는 방향 처리
     /// </summary>
     /// <param name="ct"></param>
     /// <returns></returns>
     async UniTaskVoid LookAtAsync(CancellationToken ct)
     {
-        while(true)
+        while(!ct.IsCancellationRequested)
         {
+            // 마우스 방향 수집
             Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            bool nextFilp = mousePos.x < transform.position.x;
 
-            if (mousePos.x < transform.position.x)
+            // flip 처리
+            if (isFlip != nextFilp)
             {
-                sprite.flipX = true;
+                Flip(nextFilp);           
             }
-            else
+
+            // 무기 회전 처리
+            if(weapon != null && !weapon.IsAttack)
             {
-                sprite.flipX = false;
+                Vector2 direction = (mousePos - weponParent.transform.position).normalized;
+                float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+                Vector3 weaponScale = weponParent.transform.localScale;
+                weaponScale.y = (mousePos.x < transform.position.x) ? -1f : 1f;
+                weponParent.transform.localScale = weaponScale;
+
+                weponParent.transform.rotation = Quaternion.Euler(0, 0, angle);
             }
+
             await UniTask.NextFrame(ct);
         }
+    }
+
+    void Flip(bool flip)
+    {
+        isFlip = flip;
+        sprite.flipX = flip; 
     }
 
     /// <summary>
@@ -106,6 +135,7 @@ public class Player : Unit, IInItable, IHitable
             anim.SetBool("IsMove", true);
         else if (args.state == InputState.Canceled)
             anim.SetBool("IsMove", false);
+
         movement.Dir = args.dir;
     }
 
@@ -114,6 +144,7 @@ public class Player : Unit, IInItable, IHitable
         if (state != InputState.Started)
             return;
 
+        // Mp 소모
         if (stat.Mp < 10)
             return;
         stat.Mp -= 10;
@@ -162,14 +193,30 @@ public class Player : Unit, IInItable, IHitable
     }
 
 #if UNITY_EDITOR
+    /// <summary>
+    /// 범위 시각화 도구
+    /// </summary>
     private void OnDrawGizmos()
     {
-        // 원의 색상 설정
-        Gizmos.color = Color.cyan;
+        if (weponParent == null || stat == null) return;
 
-        // 현재 오브젝트 위치에 반지름만큼의 원을 그림
-        // OverlapCircle과 동일한 위치, 반지름 값을 넣어줍니다.
-        Gizmos.DrawWireSphere(transform.position, interactRange);
+        Vector2 origin = weponParent.transform.position;
+        // 마우스 방향 계산
+        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 forward = ((Vector2)mousePos - origin).normalized;
+
+        // 원형 범위 그리기
+        Gizmos.color = new Color(0, 1, 1, 0.2f);
+        Gizmos.DrawSphere(origin, stat.Range);
+
+        // +- 60도 선 그리기
+        Gizmos.color = Color.red;
+        Vector3 leftBoundary = Quaternion.Euler(0, 0, 60) * forward * stat.Range;
+        Vector3 rightBoundary = Quaternion.Euler(0, 0, -60) * forward * stat.Range;
+
+        Gizmos.DrawLine(origin, (Vector3)origin + (Vector3)forward * stat.Range); // 중앙선
+        Gizmos.DrawLine(origin, (Vector3)origin + leftBoundary);
+        Gizmos.DrawLine(origin, (Vector3)origin + rightBoundary);
     }
 #endif
     /// <summary>
@@ -181,15 +228,130 @@ public class Player : Unit, IInItable, IHitable
         
         anim.SetBool("IsDash", true);
         movement.Speed += 12f;
+        movement.IsLockon = true;
 
-        await UniTask.WaitForSeconds(0.2f, false, PlayerLoopTiming.Update, this.destroyCancellationToken);
+        await UniTask.WaitForSeconds(0.2f, false, PlayerLoopTiming.Update, enableToken.Token);
 
         movement.Speed -= 12f;
+        movement.IsLockon = false;
+        movement.Dir = InputManager.Instance.MoveInput; // movement 갱신
         anim.SetBool("IsDash", false);
     }
 
+    /// <summary>
+    /// player 무기 장착
+    /// </summary>
+    /// <param name="obj"></param>
+    public void Equip(WeaponItem item)
+    {
+        if (item == null)
+            return;
+
+        if (weapon != null)
+            inventory.UnEquipItem(weapon.Item);
+
+        // 부모 초기화
+        weponParent.transform.rotation = Quaternion.identity;
+        weponParent.transform.localScale = Vector3.one;
+
+        // 무기 생성
+        weapon = Instantiate(item.Prefab).GetComponent<Weapon>();
+        weapon.transform.SetParent(weponParent.transform);
+
+        weapon.transform.localPosition = new Vector2(0.6f, -0.3f);
+        weapon.transform.localRotation = Quaternion.identity;
+
+        weapon.Initialize(new WeaponArg { item = item });
+
+        stat.Atk += item.data.atk;
+        stat.Range += item.data.atk_range;
+    }
+
+    /// <summary>
+    /// 장착 해제
+    /// </summary>
+    /// <param name="item"></param>
+    public void UnEquip(WeaponItem item)
+    {
+        if (item == null || weapon == null)
+            return;
+
+        if (weapon.Item != item)
+            return;
+
+        stat.Atk -= item.data.atk;
+        stat.Range -= item.data.atk_range;
+
+        // 무기 해제
+        Destroy(weapon.gameObject);
+        weapon = null;
+    }
+
+    /// <summary>
+    /// 피격시 처리
+    /// </summary>
+    /// <param name="atk"></param>
     public void Hit(int atk)
     {
         stat.Hp -= atk;
+    }
+
+    /// <summary>
+    /// 공격 처리
+    /// </summary>
+    /// <param name="state"></param>
+    public void Attack(InputState state)
+    {
+        if (state != InputState.Started)
+            return;
+
+        attackDir = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        weapon?.Attack();
+
+    }
+
+    /// <summary>
+    /// 공격 범위 탐색
+    /// </summary>
+    public void OnHitCheck()
+    {
+        Vector2 attackOrigin = weponParent.transform.position;
+        LayerMask enemyLayer = LayerMask.GetMask("Enemy");
+
+        // 필터 설정
+        ContactFilter2D filter = new ContactFilter2D();
+        filter.SetLayerMask(enemyLayer);
+        filter.useTriggers = true;      
+        filter.useLayerMask = true;
+
+        Collider2D[] targets = new Collider2D[15];
+        int count = Physics2D.OverlapCircle(attackOrigin, stat.Range, filter, targets);
+        Vector2 forward = ((Vector2)attackDir - attackOrigin).normalized; ;
+
+        for (int i = 0; i < count; i++)
+        {
+            if (targets[i] == null) continue;
+
+            Vector2 dirToTarget = ((Vector2)targets[i].transform.position - attackOrigin).normalized;
+            float dot = Vector2.Dot(forward, dirToTarget);
+
+            // Dot 0.5는 정면 기준 +-60도(총 120도) 범위입니다.
+            if (dot >= 0.5f)
+            {
+                // 트리거가 체크된 콜라이더만 Hit 판정을 진행함
+                if (targets[i] == null || targets[i].isTrigger == false) continue;
+
+                // targets[i].isTrigger 체크를 제거하거나 몬스터를 트리거로 바꾸세요.
+                if (targets[i].TryGetComponent<IHitable>(out var hitable))
+                {
+                    hitable.Hit(stat.Atk); //
+                }
+            }
+        }
+    }
+
+    public void PlayerDie(bool isDie)
+    {
+
     }
 }

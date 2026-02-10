@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1329576041183095345
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7320362261252034832}
+  m_Layer: 6
+  m_Name: WeaponParent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7320362261252034832
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1329576041183095345}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6117030981819100489}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4157256330712355396
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -86,7 +117,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 7878350319992209165, guid: ed041cd12d50ae34ea82a071dfeaa92b, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7320362261252034832}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: -2253911629886400664, guid: ed041cd12d50ae34ea82a071dfeaa92b, type: 3}
       insertIndex: 2
@@ -101,6 +135,11 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 7052023571741963813}
   m_SourcePrefab: {fileID: -8435245712485981826, guid: ed041cd12d50ae34ea82a071dfeaa92b, type: 3}
+--- !u!4 &6117030981819100489 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7878350319992209165, guid: ed041cd12d50ae34ea82a071dfeaa92b, type: 3}
+  m_PrefabInstance: {fileID: 4157256330712355396}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &6415929397083456812 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -2253911629886400664, guid: ed041cd12d50ae34ea82a071dfeaa92b, type: 3}
@@ -118,6 +157,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fac53cdf0ad630f46ad995e478963b83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weponParent: {fileID: 1329576041183095345}
+  weapon: {fileID: 0}
 --- !u!50 &3490372488660598132
 Rigidbody2D:
   serializedVersion: 4
@@ -215,7 +256,7 @@ BoxCollider2D:
   m_Offset: {x: 0, y: -0.37}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.4}
+    pivot: {x: 0.46153846, y: 0.4117647}
     oldSize: {x: 0.8125, y: 1.0625}
     newSize: {x: 0.8125, y: 1.0625}
     adaptiveTilingThreshold: 0.5

@@ -7,12 +7,18 @@ public static class AddressKeys
 
     public static readonly string DropItem = "Assets/02_Prefab/Item/DropItem.prefab";
 
-    public static readonly string Player = "Assets/02_Prefab/Player/Player.prefab";
+    public static readonly string Player = "Assets/02_Prefab/00_Player/Player.prefab";
 
-    public static readonly string InventoryUI = "Assets/02_Prefab/UI/InventoryUI.prefab";
+    public static readonly string InventoryUI = "Assets/02_Prefab/01_UI/InventoryUI.prefab";
 
-    public static readonly string HpBarUI = "Assets/02_Prefab/UI/HpBarUI.prefab";
+    public static readonly string Katana = "Assets/06_Data/00_ScriptableObject/01_WeaponItemDataSO/Katana.asset";
+
+    public static readonly string HpBarUI = "Assets/02_Prefab/01_UI/HpBarUI.prefab";
 
     public static readonly string None = "Assets/06_Data/ScriptableObject/ItemDataSO/None.asset";
+
+    public static readonly string GoblinData = "Assets/06_Data/00_ScriptableObject/02_MonsterDataSO/GoblinData.asset";
+
+    public static readonly string Goblin = "Assets/02_Prefab/03_Monster/Goblin.prefab";
 
 }

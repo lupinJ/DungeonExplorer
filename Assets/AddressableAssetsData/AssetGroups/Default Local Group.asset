@@ -30,19 +30,25 @@ MonoBehaviour:
     - GameSceneGame
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2b8bcd937b20f084c8de9335adf34314
-    m_Address: Assets/02_Prefab/Player/Player.prefab
+    m_Address: Assets/02_Prefab/00_Player/Player.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - GameSceneGame
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4b5810310ca7c8e44ac768775873b957
-    m_Address: Assets/02_Prefab/UI/InventoryUI.prefab
+    m_Address: Assets/02_Prefab/01_UI/InventoryUI.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - GameSceneUI
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cab3bde4b7805ac40b81e3b196aaff93
+    m_Address: Assets/06_Data/00_ScriptableObject/01_WeaponItemDataSO/Katana.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemData
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cca8e05ff82b8e04f8cd20d37e95dd54
-    m_Address: Assets/02_Prefab/UI/HpBarUI.prefab
+    m_Address: Assets/02_Prefab/01_UI/HpBarUI.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - GameSceneUI
@@ -52,6 +58,18 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - ItemData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: eb0ca202ef8815543b45d73dcc56c058
+    m_Address: Assets/06_Data/00_ScriptableObject/02_MonsterDataSO/GoblinData.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MonsterData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: f7f944e629e6070429dd5e88ca2d9423
+    m_Address: Assets/02_Prefab/03_Monster/Goblin.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - GameSceneGame
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: b0e309f5b398f5347811ead68682ca16, type: 2}

@@ -16,7 +16,6 @@ public class Item
     {
         if (data.id == 0)
             return;
-        Debug.Log($"Item {data.itemName} is used");
     }
 
     public virtual void PickUp() { }

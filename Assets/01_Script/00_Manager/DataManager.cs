@@ -20,6 +20,7 @@ public class DataManager : Singleton<DataManager>
 
     int maxInventory = 24; // 임시
     Dictionary<string, ItemDataSO> itemTable = new();
+    Dictionary<string, MonsterDataSO> monsterTable = new();
 
     public SaveData Data {  
         get { return saveData; }
@@ -38,6 +39,17 @@ public class DataManager : Singleton<DataManager>
             return true;
         }
         item = null;
+        return false;
+    }
+
+    public bool TryGetMonsterData(string key, out MonsterDataSO monster)
+    {
+        if (monsterTable.TryGetValue(key, out MonsterDataSO so))
+        {
+            monster = so;
+            return true;
+        }
+        monster = null;
         return false;
     }
 
@@ -87,6 +99,23 @@ public class DataManager : Singleton<DataManager>
             {
                 if (!itemTable.ContainsKey(key))
                     itemTable.Add(key, item);
+            }
+        }
+
+    }
+
+    public async UniTask LoadMonsterDataAsync(CancellationToken ct)
+    {
+        // SO Data 로드
+        List<string> Itemkeys = await AssetManager.Instance.LoadAssetsByLabelAsync("MonsterData", ct);
+
+        // 딕셔너리에 저장
+        foreach (string key in Itemkeys)
+        {
+            if (AssetManager.Instance.TryGetAsset<MonsterDataSO>(key, out MonsterDataSO monster))
+            {
+                if (!monsterTable.ContainsKey(key))
+                    monsterTable.Add(key, monster);
             }
         }
 

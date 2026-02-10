@@ -5,10 +5,11 @@ using UnityEngine;
 public enum ItemId
 {
     None,
-    Sword
+    Sword,
+    Katana
 }
 
-[CreateAssetMenu(fileName = "ItemDataSO", menuName = "Scripable Object/ItemDataSO")]
+[CreateAssetMenu(fileName = "ItemDataSO", menuName = "Scriptable Object/ItemDataSO")]
 public class ItemDataSO : ScriptableObject
 {
     public ItemId id;

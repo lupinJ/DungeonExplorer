@@ -10,6 +10,7 @@ public class Movement
 
     int isStop;
     int isPause;
+    int isLockon;
 
     bool IsStop
     {
@@ -28,6 +29,23 @@ public class Movement
                 isStop -= 1;
         }
     }
+    public bool IsLockon
+    {
+        get
+        {
+            if (isLockon == 0)
+                return false;
+            else
+                return true;
+        }
+        set
+        {
+            if (value == true)
+                isLockon += 1;
+            else
+                isLockon -= 1;
+        }
+    }
     public Movement()
     {
         this.dir = Vector2.zero;
@@ -35,6 +53,7 @@ public class Movement
         this.speed = 0;
         isStop = 0;
         isPause = 0;
+        isLockon = 0;
     }
 
     public Vector2 Velocity
@@ -57,6 +76,10 @@ public class Movement
     {
         set
         {
+            if (isLockon > 0)
+            {
+                return;
+            }
             dir = value.normalized;
         }
     }

@@ -41,8 +41,11 @@ public class LoadManager : Singleton<LoadManager>
 
     private async UniTaskVoid Loading(string name)
     {
+        InputManager.Instance.InputDisalbeAll();
+
         // 1. Scene에 필요한 로딩을 모두 한다.
         await DataManager.Instance.LoadItemDataAsync(this.destroyCancellationToken);
+        await DataManager.Instance.LoadMonsterDataAsync(this.destroyCancellationToken);
 
         List<string> uIList = await AssetManager.Instance.LoadAssetsByLabelAsync($"{name}UI", this.destroyCancellationToken);
         List<string> gameList = await AssetManager.Instance.LoadAssetsByLabelAsync($"{name}Game", this.destroyCancellationToken);
@@ -56,6 +59,7 @@ public class LoadManager : Singleton<LoadManager>
         GameManager.Instance.OnSceneLoadedInit();
 
         // 4. 게임을 시작한다.
+        InputManager.Instance.InputEnableAll();
     }
     
     private async UniTaskVoid UnLoading(string name)

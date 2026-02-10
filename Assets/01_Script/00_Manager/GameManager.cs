@@ -13,6 +13,12 @@ public class GameManager : Singleton<GameManager>
         {
             player = Instantiate(obj).GetComponent<Player>();
         }
+
+        if(AssetManager.Instance.TryGetAsset<GameObject>(AddressKeys.Goblin, out GameObject obj2))
+        {
+            Instantiate(obj2).TryGetComponent<IInItable>(out IInItable init);
+            init?.Initialize(new MonsterArg { position = new Vector2(0f, 0f)});
+        }
         
     }
 

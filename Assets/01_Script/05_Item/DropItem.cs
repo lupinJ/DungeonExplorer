@@ -1,5 +1,8 @@
+using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 struct DropItemArg : InitData {
@@ -12,6 +15,7 @@ public class DropItem : MonoBehaviour, IInItable, IInteractable
 {
     SpriteRenderer sprite;
     Item item;
+    CancellationTokenSource cts;
 
     public void Initialize(InitData idata = default)
     {
@@ -25,6 +29,20 @@ public class DropItem : MonoBehaviour, IInItable, IInteractable
         {
             Debug.Log("DropItem Initialize Error");
         }
+
+        StartFloat();
+    }
+
+    void StartFloat()
+    {
+        cts?.Cancel();
+        cts?.Dispose();
+        cts = new CancellationTokenSource();
+
+        transform.DOMoveY(transform.position.y + 0.2f, 1f)
+            .SetEase(Ease.InOutSine)
+            .SetLoops(-1, LoopType.Yoyo)
+            .WithCancellation(cts.Token);
     }
 
     public void Interact()
@@ -38,5 +56,15 @@ public class DropItem : MonoBehaviour, IInItable, IInteractable
         sprite = GetComponent<SpriteRenderer>();
     }
 
-    
+    private void OnEnable()
+    {
+        
+    }
+    private void OnDisable()
+    {
+        cts?.Cancel();
+        cts?.Dispose();
+        cts = null;
+    }
+
 }

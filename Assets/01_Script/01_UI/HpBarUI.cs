@@ -22,8 +22,8 @@ public class HpBarUI : UIBase, IInItable
     public void Initialize(InitData data = default)
     {
         // hp, mp 이벤트 구독
-        EventManager.Instance.Subscribe<Stat.HpEvent, PointArg>(OnHpChanged);
-        EventManager.Instance.Subscribe<Stat.MpEvent, PointArg>(OnMpChanged);
+        EventManager.Instance.Subscribe<PlayerStat.HpEvent, PointArg>(OnHpChanged);
+        EventManager.Instance.Subscribe<PlayerStat.MpEvent, PointArg>(OnMpChanged);
     }
 
     private void OnHpChanged(PointArg arg)

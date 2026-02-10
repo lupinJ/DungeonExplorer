@@ -8,9 +8,9 @@ public class Inventory
 
     InventoryChangedEvent inventoryChangedEvent;
 
-    public List<Item> items;
-    public int capacity;
-    ItemDataSO none;
+    public List<Item> items; // 아이템
+    public int capacity; // 총 공간
+    ItemDataSO none; // 빈 공간 처리용
 
     public Inventory()
     {
@@ -24,13 +24,15 @@ public class Inventory
 
     public void FillInventory(List<ItemId> list)
     {
-        
-        DataManager.Instance.TryGetItemData(AddressKeys.Sword, out ItemDataSO item2);
+        DataManager.Instance.TryGetItemData(AddressKeys.Sword, out ItemDataSO item1);
+        DataManager.Instance.TryGetItemData(AddressKeys.Katana, out ItemDataSO item2);
+        WeaponItemDataSO weapon = item2 as WeaponItemDataSO;
+
         items.Clear();
-        items.Add(new(item2));
-        items.Add(new(item2));
-        items.Add(new(item2));
-        items.Add(new(item2));
+        items.Add(new WeaponItem(weapon, false));
+        items.Add(new WeaponItem(weapon, false));
+        items.Add(new(item1));
+        items.Add(new(item1));
         for (int i = 0; i < 20; i++)
             items.Add(new(none));
     }
@@ -40,7 +42,7 @@ public class Inventory
     /// </summary>
     /// <param name="item"></param>
     public void AddItem(Item item)
-    {
+    { 
         for (int i = 0; i < items.Count; i++)
         {
             if (items[i].data.id == ItemId.None)
@@ -106,5 +108,15 @@ public class Inventory
         items[index1] = items[index2];
         items[index2] = temp;
         inventoryChangedEvent.Invoke(this);
+    }
+
+    public void UnEquipItem(WeaponItem weapon)
+    {
+        if (weapon == null)
+            return;
+
+        int index = items.IndexOf(weapon);
+
+        UseItem(index);
     }
 }

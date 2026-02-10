@@ -54,6 +54,7 @@ public class SlotUI : UIBase, IPointerClickHandler, IPointerDownHandler, IPointe
             ItemImage.enabled = true;
         }
 
+        // Item 표시
         image.sprite = activeImage;
         ItemImage.sprite = item.data.image;
 
@@ -62,12 +63,18 @@ public class SlotUI : UIBase, IPointerClickHandler, IPointerDownHandler, IPointe
         {
             text.text = $"{cItem.Count}";
         }
-        else if (item.data.maxCount == 1) // 무기일 경우 E 표시 예정
-            text.text = "";
+        else if(item is WeaponItem WItem)
+        {
+            if (WItem.Is_equip)
+                text.text = "E";
+            else
+                text.text = "";
+        }
         else
             text.text = "";
 
     }
+
     /// <summary>
     /// 클릭 처리 함수
     /// </summary>

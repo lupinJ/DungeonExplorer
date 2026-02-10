@@ -1,6 +1,6 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 
 public struct PointArg
@@ -8,13 +8,21 @@ public struct PointArg
     public int current, max;
 }
 
+[System.Serializable]
+public struct StatData
+{
+    public int maxHp;
+    public int maxMp;
+    public int atk;
+    public float atk_range;
+    public float speed;
+}
+
 public class Stat 
 {
-    public class HpEvent : GameAction<PointArg> { }
-    public class MpEvent : GameAction<PointArg> { }
-
-    HpEvent hpEvent;
-    MpEvent mpEvent;
+    public event Action<PointArg> onHpChanged;
+    public event Action<PointArg> onMpChanged;
+    public event Action<bool> onDie;
 
     int maxHp;
     int hp;
@@ -23,22 +31,35 @@ public class Stat
     int mp;
 
     int atk;
+    float atkRange;
 
     public Stat()
     {
-        hpEvent = new HpEvent();
-        mpEvent = new MpEvent();
-        
-        EventManager.Instance.AddEvent(hpEvent);
-        EventManager.Instance.AddEvent(mpEvent);
-
         // юс╫ц ╫╨ех
         maxHp = 100;
         hp = 100;
         maxMp = 100;
         mp = 100;
-        
+
+        atk = 10;
+        atkRange = 2f;
     }
+
+    public Stat(StatData data)
+    {
+        InitStat(data);
+    }
+
+    public void InitStat(StatData data)
+    {
+        maxHp = data.maxHp;
+        hp = maxHp;
+        maxMp = data.maxMp;
+        mp = maxMp;
+        atk = data.atk;
+        atkRange = data.atk_range;
+    }
+
     public int Hp
     {
         get { return hp; }
@@ -52,8 +73,11 @@ public class Stat
             {
                 hp = value;
             }
-                
-            hpEvent.Invoke(new PointArg { current = hp, max = maxHp });
+
+            onHpChanged?.Invoke(new PointArg { current = hp, max = maxHp });
+            if (hp <= 0)
+                onDie?.Invoke(true);
+
         }
     }
 
@@ -70,9 +94,24 @@ public class Stat
             {
                 mp = value;
             }
-
-            mpEvent.Invoke(new PointArg { current = mp, max = maxMp });
+            onMpChanged?.Invoke(new PointArg { current = mp, max = maxMp });
+            
         }
+    }
+
+    public int Atk
+    {
+        get { return atk; }
+        set
+        {
+            atk = value;
+        }
+    }
+
+    public float Range
+    {
+        get { return atkRange; }
+        set { atkRange = value; }
     }
 
 }

@@ -29,11 +29,15 @@ public class InputManager : Singleton<InputManager>,
     public class MoveEvent : GameAction<MoveArgs> { }
     public class DashEvent : GameAction<InputState> { }
     public class InteractEvent : GameAction<InputState> { }
+    public class AttackEvent : GameAction<InputState> { }
 
     PlayerInputSystem input;
     MoveEvent moveEvent;
     DashEvent dashEvent;
     InteractEvent interactEvent;
+    AttackEvent attackEvent;
+
+    public Vector2 MoveInput => input.Player.Move.ReadValue<Vector2>();
 
     /// <summary>
     /// ΩÃ±€≈Ê √ ±‚»≠ «‘ºˆ
@@ -44,6 +48,7 @@ public class InputManager : Singleton<InputManager>,
         moveEvent = new MoveEvent();
         dashEvent = new DashEvent();
         interactEvent = new InteractEvent();
+        attackEvent = new AttackEvent();
     }
 
     private void Start()
@@ -55,6 +60,7 @@ public class InputManager : Singleton<InputManager>,
         EventManager.Instance.AddEvent<MoveEvent>(moveEvent);
         EventManager.Instance.AddEvent<DashEvent>(dashEvent);
         EventManager.Instance.AddEvent<InteractEvent>(interactEvent);
+        EventManager.Instance.AddEvent<AttackEvent>(attackEvent);
     }
 
     /// <summary>
@@ -67,6 +73,7 @@ public class InputManager : Singleton<InputManager>,
             EventManager.Instance.RemoveEvent<MoveEvent>();
             EventManager.Instance.RemoveEvent<DashEvent>();
             EventManager.Instance.RemoveEvent<InteractEvent>();
+            EventManager.Instance.RemoveEvent<AttackEvent>();
         }
 
     }
@@ -89,26 +96,33 @@ public class InputManager : Singleton<InputManager>,
         input.Player.RemoveCallbacks(this);
     }
 
+    public void InputEnableAll()
+    {
+        input.GameUI.Enable();
+        input.Player.Enable();
+    }
+
+    public void InputDisalbeAll()
+    {
+        input.GameUI.Disable();
+        input.Player.Disable();
+    }
+
     public void OnAttack(InputAction.CallbackContext context)
     {
-        
+        InputState state = GetState(context);
+        attackEvent.Invoke(state);
     }
 
     public void OnInteract(InputAction.CallbackContext context)
     {
-        InputState state = InputState.Performed;
-
-        if (context.started) state = InputState.Started;
-        else if (context.canceled) state = InputState.Canceled;
+        InputState state = GetState(context);
         interactEvent.Invoke(state);
     }
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        InputState state = InputState.Performed;
-        
-        if (context.started) state = InputState.Started;
-        else if (context.canceled) state = InputState.Canceled;
+        InputState state = GetState(context);
 
         moveEvent.Invoke(new MoveArgs()
         {
@@ -119,10 +133,7 @@ public class InputManager : Singleton<InputManager>,
 
     public void OnDash(InputAction.CallbackContext context)
     {
-        InputState state = InputState.Performed;
-
-        if (context.started) state = InputState.Started;
-        else if (context.canceled) state = InputState.Canceled;
+        InputState state = GetState(context);
         dashEvent.Invoke(state);
     }
 
@@ -135,11 +146,24 @@ public class InputManager : Singleton<InputManager>,
         {
             PopupUI inventory = uiBase as PopupUI;
             if (inventory.IsActive)
+            {
+                input.Player.Enable();
                 inventory.HidePanel();
+            }
             else
+            {
+                input.Player.Disable();
                 inventory.ShowPanel();
+            }
         }
     }
 
-  
+    InputState GetState(InputAction.CallbackContext context)
+    {
+        InputState state = InputState.Performed;
+
+        if (context.started) state = InputState.Started;
+        else if (context.canceled) state = InputState.Canceled;
+        return state;
+    }
 }

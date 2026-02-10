@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fac6cebec10502a4db58070b1475a91d, type: 3}
+  m_Name: Katana
+  m_EditorClassIdentifier: 
+  id: 2
+  itemName: "\uCE74\uD0C0\uB098"
+  tooltip: "\uC0AC\uBB34\uB77C\uC774\uB4E4\uC774 \uC4F0\uB358 \uAE34 \uAC80"
+  maxCount: 1
+  price: 100
+  image: {fileID: 21300000, guid: 6d147e9bbd85fb74982491db4a3be47f, type: 3}
+  atk: 10
+  atk_range: 2
+  weapon: {fileID: 8654352929267276263, guid: 04cf77d984e763b45b17392e2d039bb6, type: 3}
