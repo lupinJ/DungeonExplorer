@@ -33,6 +33,7 @@ public class Player : Unit, IInItable, IHitable
         movement.Speed = 5f;
         interactRange = 1.0f;
         isFlip = false;
+        stat.Atk = 50;
     }
     public void Initialize(InitData data = default)
     {

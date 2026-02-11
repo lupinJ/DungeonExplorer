@@ -29,6 +29,7 @@ public class LoadManager : Singleton<LoadManager>
         UnLoading(SceneManager.GetActiveScene().name).Forget();
     }
 
+#pragma warning disable CS1998 // 이 비동기 메서드에는 'await' 연산자가 없으며 메서드가 동시에 실행됩니다.
     private async UniTaskVoid FirstLoading()
     {
         
@@ -38,6 +39,7 @@ public class LoadManager : Singleton<LoadManager>
     {
 
     }
+#pragma warning restore CS1998
 
     private async UniTaskVoid Loading(string name)
     {
