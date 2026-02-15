@@ -185,6 +185,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b6162d74bb47d24ba851016a0e070db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: eb0ca202ef8815543b45d73dcc56c058, type: 2}
+  attackRange: 1.2
+  chaceRange: 4
   attackDelay: 0.8
   animStart: 0.6
   attackStart: 0.2

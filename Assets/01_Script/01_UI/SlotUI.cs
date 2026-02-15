@@ -82,7 +82,7 @@ public class SlotUI : UIBase, IPointerClickHandler, IPointerDownHandler, IPointe
     public void OnPointerClick(PointerEventData eventData)
     {
         // up down µ¿½Ã
-        onItemClicked.Invoke(index);
+        onItemClicked?.Invoke(index);
     }
     public void OnPointerDown(PointerEventData eventData)
     {
@@ -92,7 +92,7 @@ public class SlotUI : UIBase, IPointerClickHandler, IPointerDownHandler, IPointe
         if (item.data.id == ItemId.None)
             return;
 
-        onDragStart.Invoke(this.item);
+        onDragStart?.Invoke(this.item);
     }
 
     /// <summary>
@@ -104,12 +104,12 @@ public class SlotUI : UIBase, IPointerClickHandler, IPointerDownHandler, IPointe
         if (this.item == null)
             return;
 
-        onDragEnd.Invoke();
+        onDragEnd?.Invoke();
 
         if (eventData.pointerEnter == null)
         {
             if(!(item.data.id == ItemId.None))
-                onItemDrop.Invoke(index);
+                onItemDrop?.Invoke(index);
             return;
         }
         
@@ -120,7 +120,7 @@ public class SlotUI : UIBase, IPointerClickHandler, IPointerDownHandler, IPointe
         if (otherSlot.item == null)
             return;
 
-        onItemSwap.Invoke(index, otherSlot.index);
+        onItemSwap?.Invoke(index, otherSlot.index);
         
     }
 

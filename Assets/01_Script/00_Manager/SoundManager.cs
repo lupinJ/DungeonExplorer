@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class SoundManager : WeekSingleton<SoundManager>
+public class SoundManager : WeakSingleton<SoundManager>
 {
     public PoolData data;
 

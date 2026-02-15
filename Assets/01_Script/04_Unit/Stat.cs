@@ -60,6 +60,17 @@ public class Stat
         atkRange = data.atk_range;
     }
 
+
+    public int MaxHp
+    {
+        get { return maxHp; }
+        set { maxHp = value; }
+    }
+    public int MaxMp
+    {
+        get { return maxMp; }
+        set { maxMp = value; }
+    }
     public int Hp
     {
         get { return hp; }

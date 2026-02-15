@@ -9,7 +9,7 @@ public class Inventory
     InventoryChangedEvent inventoryChangedEvent;
 
     public List<Item> items; // 아이템
-    public int capacity; // 총 공간
+    int capacity; // 총 공간
     ItemDataSO none; // 빈 공간 처리용
 
     public Inventory()
@@ -18,23 +18,18 @@ public class Inventory
         inventoryChangedEvent = new InventoryChangedEvent();
 
         EventManager.Instance.AddEvent<InventoryChangedEvent>(inventoryChangedEvent);
-        DataManager.Instance.TryGetItemData(AddressKeys.None, out none);
         FillInventory(null);
     }
 
     public void FillInventory(List<ItemId> list)
     {
-        DataManager.Instance.TryGetItemData(AddressKeys.Sword, out ItemDataSO item1);
-        DataManager.Instance.TryGetItemData(AddressKeys.Katana, out ItemDataSO item2);
-        WeaponItemDataSO weapon = item2 as WeaponItemDataSO;
-
         items.Clear();
-        items.Add(new WeaponItem(weapon, false));
-        items.Add(new WeaponItem(weapon, false));
-        items.Add(new(item1));
-        items.Add(new(item1));
+        items.Add(ItemFactory.CreateItem(ItemId.Katana));
+        items.Add(ItemFactory.CreateItem(ItemId.Katana));
+        items.Add(ItemFactory.CreateItem(ItemId.HealthPotion, 11));
+        items.Add(ItemFactory.CreateItem(ItemId.ManaPotion, 9));
         for (int i = 0; i < 20; i++)
-            items.Add(new(none));
+            items.Add(ItemFactory.CreateItem(ItemId.None));
     }
 
     /// <summary>
@@ -85,7 +80,7 @@ public class Inventory
         }
 
         // 떨궜으니 인벤을 비운다.
-        items[index] = new Item(none);
+        items[index] = ItemFactory.CreateItem(ItemId.None);
         inventoryChangedEvent.Invoke(this);
     }
 
@@ -99,15 +94,30 @@ public class Inventory
             return;
 
         items[index].Use();
+        if (items[index] is CountableItem item && item.Count == 0)
+            items[index] = ItemFactory.CreateItem(ItemId.None);
+
         inventoryChangedEvent.Invoke(this);
     }
 
     public void SwapItem(int index1, int index2)
     {
-        Item temp = items[index1];
-        items[index1] = items[index2];
-        items[index2] = temp;
-        inventoryChangedEvent.Invoke(this);
+        // 아이템 합치기
+        if (items[index1].data.id == items[index2].data.id)
+        {
+            if(items[index1] is CountableItem)
+            {
+
+            }
+        }
+        else
+        {
+            Item temp = items[index1];
+            items[index1] = items[index2];
+            items[index2] = temp;
+            inventoryChangedEvent.Invoke(this);
+        }
+        
     }
 
     public void UnEquipItem(WeaponItem weapon)

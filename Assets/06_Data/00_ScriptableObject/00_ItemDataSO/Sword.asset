@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5332dec9de2c4b14991ae01d8237f2d6, type: 3}
   m_Name: Sword
   m_EditorClassIdentifier: 
-  id: 1
+  id: 3
   itemName: "\uAC80"
   tooltip: "\uC77C\uBC18 \uCCA0\uC81C \uAC80\uC774\uB2E4."
   maxCount: 1

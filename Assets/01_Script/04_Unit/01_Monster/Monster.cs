@@ -9,19 +9,21 @@ struct MonsterArg : InitData
 
 public abstract class Monster : Unit, IHitable, IInItable
 {
+    protected MonsterDataSO data; // 몬스터 정보
     protected Stat stat;
     protected Movement movement;
     protected bool isDead; 
+
     protected override void Awake()
     {
         base.Awake();
         stat = new Stat();
         movement = new Movement();
+        isDead = false;
     }
     public virtual void Hit(int atk)
     {
         stat.Hp -= atk;
-        Debug.Log($"Hit : hp = {stat.Hp}");
     }
 
     public virtual void Initialize(InitData data = null)

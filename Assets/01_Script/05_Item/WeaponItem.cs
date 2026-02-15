@@ -4,15 +4,22 @@ using UnityEngine;
 
 public class WeaponItem : Item
 {
-    public WeaponItemDataSO data;
+    public WeaponItemDataSO wdata;
     bool is_equip;
 
-    public GameObject Prefab => data.weapon;
+    public GameObject Prefab => wdata.weapon;
     public bool Is_equip => is_equip;
-    public WeaponItem(WeaponItemDataSO data, bool is_equip) : base(data)
+    public WeaponItem() { }
+    
+    public override void Initialize(InitData data)
     {
-        this.data = data;
-        this.is_equip = is_equip;
+        base.Initialize(data);
+
+        if(data is ItemArg arg)
+        {
+            this.wdata = arg.itemDataSO as WeaponItemDataSO;
+            is_equip = false;
+        }
     }
 
     public override void Use()

@@ -15,6 +15,7 @@ public class Player : Unit, IInItable, IHitable
     PlayerStat stat; // player 스텟
     Movement movement; // 움직임 계산
     CancellationTokenSource enableToken; // 토큰
+    Camera mainCamera; // 카메라 캐싱
 
     [SerializeField] GameObject weponParent; // 무기 회전 object
     [SerializeField] Weapon weapon; // 장착한 무기
@@ -27,6 +28,7 @@ public class Player : Unit, IInItable, IHitable
     {
         base.Awake();
 
+        mainCamera = Camera.main;
         stat = new PlayerStat();
         inventory = new Inventory();
         movement = new Movement();
@@ -71,6 +73,24 @@ public class Player : Unit, IInItable, IHitable
         }        
     }
 
+    public bool TryHeal(int value)
+    {
+        if(stat.Hp == stat.MaxHp)
+            return false;
+
+        stat.Hp += value;
+        return true;
+    }
+
+    public bool ManaRecovery(int value)
+    {
+        if (stat.Mp == stat.MaxMp)
+            return false;
+
+        stat.Mp += value;
+        return true;
+    }
+
     /// <summary>
     /// 물리 이동 연산 함수
     /// </summary>
@@ -94,7 +114,7 @@ public class Player : Unit, IInItable, IHitable
         while(!ct.IsCancellationRequested)
         {
             // 마우스 방향 수집
-            Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            Vector3 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
             bool nextFilp = mousePos.x < transform.position.x;
 
             // flip 처리
@@ -150,7 +170,7 @@ public class Player : Unit, IInItable, IHitable
             return;
         stat.Mp -= 10;
 
-        DashAsync().Forget();
+        DashAsync(enableToken.Token).Forget();
     }
 
     
@@ -224,7 +244,7 @@ public class Player : Unit, IInItable, IHitable
     /// player 대쉬 처리
     /// </summary>
     /// <returns></returns>
-    public async UniTaskVoid DashAsync()
+    public async UniTaskVoid DashAsync(CancellationToken ct)
     {
         
         anim.SetBool("IsDash", true);
@@ -264,8 +284,8 @@ public class Player : Unit, IInItable, IHitable
 
         weapon.Initialize(new WeaponArg { item = item });
 
-        stat.Atk += item.data.atk;
-        stat.Range += item.data.atk_range;
+        stat.Atk += item.wdata.atk;
+        stat.Range += item.wdata.atk_range;
     }
 
     /// <summary>
@@ -280,8 +300,8 @@ public class Player : Unit, IInItable, IHitable
         if (weapon.Item != item)
             return;
 
-        stat.Atk -= item.data.atk;
-        stat.Range -= item.data.atk_range;
+        stat.Atk -= item.wdata.atk;
+        stat.Range -= item.wdata.atk_range;
 
         // 무기 해제
         Destroy(weapon.gameObject);
@@ -342,10 +362,9 @@ public class Player : Unit, IInItable, IHitable
                 // 트리거가 체크된 콜라이더만 Hit 판정을 진행함
                 if (targets[i] == null || targets[i].isTrigger == false) continue;
 
-                // targets[i].isTrigger 체크를 제거하거나 몬스터를 트리거로 바꾸세요.
                 if (targets[i].TryGetComponent<IHitable>(out var hitable))
                 {
-                    hitable.Hit(stat.Atk); //
+                    hitable.Hit(stat.Atk); 
                 }
             }
         }

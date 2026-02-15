@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeekSingleton<T> : MonoBehaviour where T : MonoBehaviour
+public class WeakSingleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T instance;
     private static bool is_quit = false;
@@ -37,7 +37,7 @@ public class WeekSingleton<T> : MonoBehaviour where T : MonoBehaviour
         {
             Destroy(gameObject);
         }
-  
+
     }
 
     protected virtual void Init() { }

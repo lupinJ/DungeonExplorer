@@ -81,7 +81,6 @@ public class AssetManager : Singleton<AssetManager>
         try
         {
             await handle.ToUniTask(cancellationToken: ct);
-            handle.WaitForCompletion();
 
             if (handle.Status == AsyncOperationStatus.Succeeded)
             {

@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class Goblin : Monster
 {
+    // 별개의 so object 권장
     [SerializeField] private float attackRange = 1.2f; // 공격 시도 범위
     [SerializeField] private float chaceRange = 4.0f; // 추적 범위
 
@@ -28,6 +29,12 @@ public class Goblin : Monster
 
     SelectorNode rootNode; // behavior tree
 
+    protected override void Awake()
+    {
+        base.Awake();
+        if(DataManager.Instance.TryGetMonsterData(AddressKeys.GoblinData, out MonsterDataSO monster))
+            data = monster;
+    }
     /// <summary>
     /// 초기화 함수
     /// </summary>
@@ -122,7 +129,13 @@ public class Goblin : Monster
     private async UniTask<INode.State> DoChaseAction(CancellationToken ct)
     {
         Vector2 dir = (target.position - transform.position).normalized;
-        movement.Dir = dir; // 이동
+
+        if(dir.x < 0)
+            sprite.flipX = true;
+        else
+            sprite.flipX = false;
+
+            movement.Dir = dir; // 이동
         anim.SetBool("IsMove", true); // 필요 시 애니메이션 추가
         return INode.State.Running; // 계속 추적 중임을 알림
     }
@@ -204,7 +217,7 @@ public class Goblin : Monster
         catch (System.OperationCanceledException) 
         {
             //indicator.gameObject?.SetActive(false);
-            anim.SetBool("IsAttack", false);
+            anim?.SetBool("IsAttack", false);
         }
     }
 

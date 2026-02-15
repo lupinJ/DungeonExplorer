@@ -41,6 +41,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - GameSceneUI
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: bb4a238aa29a567408c0a2883ceecc20
+    m_Address: Assets/06_Data/00_ScriptableObject/00_ItemDataSO/01_Potion/HealthPotion.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemData
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: cab3bde4b7805ac40b81e3b196aaff93
     m_Address: Assets/06_Data/00_ScriptableObject/01_WeaponItemDataSO/Katana.asset
     m_ReadOnly: 0
@@ -70,6 +76,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - GameSceneGame
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: ffc560bf96c833744b787e05216f8e52
+    m_Address: Assets/06_Data/00_ScriptableObject/00_ItemDataSO/01_Potion/ManaPotion.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - ItemData
     FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: b0e309f5b398f5347811ead68682ca16, type: 2}

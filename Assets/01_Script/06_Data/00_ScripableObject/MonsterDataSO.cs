@@ -11,6 +11,7 @@ public enum MonsterId
 [CreateAssetMenu(fileName = "MonsterDataSO", menuName = "Scriptable Object/MonsterDataSO")]
 public class MonsterDataSO : ScriptableObject
 {
+    [Header("=== Monster Basic Info ===")]
     public MonsterId id;
     public string Monstername;
     public StatData stat;

@@ -2,19 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+struct ItemArg : InitData
+{
+    public ItemDataSO itemDataSO;
+}
 
-public class Item 
+public class Item : IInItable
 {
     public ItemDataSO data;
     
-    public Item(ItemDataSO data)
+    public Item() { }
+
+    public virtual void Initialize(InitData data) 
     {
-        this.data = data;
+        if(data is ItemArg arg)
+        {
+            this.data = arg.itemDataSO;
+        }
     }
 
     public virtual void Use()
     {
-        if (data.id == 0)
+        if (data.id == ItemId.None)
             return;
     }
 

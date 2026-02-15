@@ -19,7 +19,7 @@ public class DataManager : Singleton<DataManager>
     SaveData saveData;
 
     int maxInventory = 24; // юс╫ц
-    Dictionary<string, ItemDataSO> itemTable = new();
+    Dictionary<ItemId, ItemDataSO> itemTable = new();
     Dictionary<string, MonsterDataSO> monsterTable = new();
 
     public SaveData Data {  
@@ -28,12 +28,12 @@ public class DataManager : Singleton<DataManager>
     }
     protected override void Init()
     {
-        path = Path.Combine(Application.dataPath, "database.json");
+        path = Path.Combine(Application.persistentDataPath, "database.json");
     }
 
-    public bool TryGetItemData(string key, out ItemDataSO item)
+    public bool TryGetItemData(ItemId id, out ItemDataSO item)
     {
-        if (itemTable.TryGetValue(key, out ItemDataSO so))
+        if (itemTable.TryGetValue(id, out ItemDataSO so))
         {
             item = so;
             return true;
@@ -97,8 +97,9 @@ public class DataManager : Singleton<DataManager>
         {
             if(AssetManager.Instance.TryGetAsset<ItemDataSO>(key, out ItemDataSO item))
             {
-                if (!itemTable.ContainsKey(key))
-                    itemTable.Add(key, item);
+                ItemId id = item.id;
+                if (!itemTable.ContainsKey(id))
+                    itemTable.Add(id, item);
             }
         }
 

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fac6cebec10502a4db58070b1475a91d, type: 3}
   m_Name: Katana
   m_EditorClassIdentifier: 
-  id: 2
+  id: 4
   itemName: "\uCE74\uD0C0\uB098"
   tooltip: "\uC0AC\uBB34\uB77C\uC774\uB4E4\uC774 \uC4F0\uB358 \uAE34 \uAC80"
   maxCount: 1

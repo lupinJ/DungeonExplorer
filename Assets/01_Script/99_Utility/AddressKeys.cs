@@ -21,4 +21,8 @@ public static class AddressKeys
 
     public static readonly string Goblin = "Assets/02_Prefab/03_Monster/Goblin.prefab";
 
+    public static readonly string HealthPotion = "Assets/06_Data/00_ScriptableObject/00_ItemDataSO/01_Potion/HealthPotion.asset";
+
+    public static readonly string ManaPotion = "Assets/06_Data/00_ScriptableObject/00_ItemDataSO/01_Potion/ManaPotion.asset";
+
 }
