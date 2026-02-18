@@ -28,7 +28,6 @@ public static class ItemFactory
         {
             Item item = creator.Invoke();
 
-            // 데이터(SO) 연결 로직 (DataManager 등 활용)
             if (DataManager.Instance.TryGetItemData(id, out var data))
             {
                 item.Initialize(new ItemArg { itemDataSO = data });

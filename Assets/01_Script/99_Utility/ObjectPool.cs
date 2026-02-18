@@ -2,45 +2,85 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-public struct PoolData
+public interface IPoolable
 {
-    public GameObject prefab;
-    public string name;
-    public int count;
+    public void OnSpawn();
+    public void OnDespawn();
 }
 
 public class ObjectPool
 {
     Queue<GameObject> pool;
-    PoolData data;
+    private GameObject prefab;
+    private Transform root;
+    private string key;
 
-    public ObjectPool(PoolData data)
+    public ObjectPool(GameObject prefab, Transform root, int count)
     {
-        this.data = data;
         pool = new Queue<GameObject>();
-        Init();
-    }
-    void Init()
-    {
-        for (int i = 0; i < data.count; i++)
+        this.prefab = prefab;
+        this.root = root;
+        this.key = prefab.name;
+        
+        for(int i=0; i < count; i++)
         {
-            GameObject newObj = GameObject.Instantiate(data.prefab);
-            newObj.SetActive(false);
-            pool.Enqueue(newObj);
+            CreateInstance();
         }
     }
-    public GameObject UsePool(Vector3 pos, Quaternion rot)
+
+    private GameObject CreateInstance()
     {
-        GameObject useObj = pool.Dequeue();
-        useObj.transform.position = pos;
-        useObj.transform.rotation = rot;
-        useObj.SetActive(true);
-        return useObj;
+        GameObject obj = GameObject.Instantiate(prefab, root);
+        obj.name = key;
+        obj.SetActive(false);
+        pool.Enqueue(obj);
+        return obj;
     }
-    public void ReturnPool(GameObject returnObj)
+
+    public GameObject UsePool(Transform parent = null)
     {
-        returnObj.SetActive(false);
-        pool.Enqueue(returnObj);
+        return UsePool(Vector3.zero, Quaternion.identity, parent);
+    }
+    public GameObject UsePool(Vector3 pos, Quaternion rot, Transform parent = null)
+    {
+        if(pool.Count == 0)
+        {
+            CreateInstance();
+        }
+
+        GameObject obj = pool.Dequeue();
+        obj.transform.SetParent(parent);
+        obj.transform.SetPositionAndRotation(pos, rot);
+        obj.SetActive(true);
+
+        if (obj.TryGetComponent<IPoolable>(out var poolable))
+        {
+            poolable.OnSpawn();
+        }
+
+        return obj;
+    }
+    public void ReturnPool(GameObject obj)
+    {
+        if (obj == null) 
+            return;
+
+        if (obj.TryGetComponent<IPoolable>(out var poolable))
+        {
+            poolable.OnDespawn();
+        }
+
+        obj.SetActive(false);
+        obj.transform.SetParent(root);
+        pool.Enqueue(obj);
+    }
+
+    public void Clear()
+    {
+        while(pool.Count > 0)
+        {
+            GameObject.Destroy(pool.Dequeue());
+        }
+        pool.Clear();
     }
 }

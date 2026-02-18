@@ -33,6 +33,8 @@ public class Stat
     int atk;
     float atkRange;
 
+    int isInvincible;
+
     public Stat()
     {
         // юс╫ц ╫╨ех
@@ -58,6 +60,7 @@ public class Stat
         mp = maxMp;
         atk = data.atk;
         atkRange = data.atk_range;
+        isInvincible = 0;
     }
 
 
@@ -124,5 +127,16 @@ public class Stat
         get { return atkRange; }
         set { atkRange = value; }
     }
-
+    
+    public bool IsInvincible
+    {
+        get { return isInvincible != 0; }
+        set
+        {
+            if (value)
+                isInvincible++;
+            else
+                isInvincible--;
+        }
+    }
 }

@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: GoblinAttack
+  m_EditorClassIdentifier: Assembly-CSharp::MelleeAttackSO
+  skillName: "\uACE0\uBE14\uB9B0 \uACF5\uACA9"
+  coolTime: 1
+  attackRange: 1.3
+  startDelay: 0.7
+  animTime: 0.2
+  endDelay: 0.1
+  BoxRange: {x: 1.5, y: 1}

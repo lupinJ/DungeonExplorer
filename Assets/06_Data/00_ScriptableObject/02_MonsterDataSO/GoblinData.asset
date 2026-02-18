@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: GoblinData
   m_EditorClassIdentifier: 
   id: 1
-  Monstername: "\uACE0\uBE14\uB9B0"
+  monsterName: "\uACE0\uBE14\uB9B0"
+  birthTime: 0.5
+  ChaseRange: {x: 1.3, y: 4}
   stat:
     maxHp: 100
     maxMp: 100
     atk: 10
-    atk_range: 1
+    atk_range: 4
     speed: 4

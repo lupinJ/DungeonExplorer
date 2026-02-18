@@ -20,7 +20,8 @@ public class DataManager : Singleton<DataManager>
 
     int maxInventory = 24; // 임시
     Dictionary<ItemId, ItemDataSO> itemTable = new();
-    Dictionary<string, MonsterDataSO> monsterTable = new();
+    //Dictionary<string, MonsterDataSO> monsterTable = new();
+    Dictionary<MonsterId, string> monsterPathTable = new();
 
     public SaveData Data {  
         get { return saveData; }
@@ -42,14 +43,15 @@ public class DataManager : Singleton<DataManager>
         return false;
     }
 
-    public bool TryGetMonsterData(string key, out MonsterDataSO monster)
+    public bool TryGetMonsterPath(MonsterId id, out string key)
     {
-        if (monsterTable.TryGetValue(key, out MonsterDataSO so))
+        if(monsterPathTable.TryGetValue(id, out string path))
         {
-            monster = so;
+            key = path;
             return true;
         }
-        monster = null;
+        
+        key = null;
         return false;
     }
 
@@ -109,16 +111,19 @@ public class DataManager : Singleton<DataManager>
     {
         // SO Data 로드
         List<string> Itemkeys = await AssetManager.Instance.LoadAssetsByLabelAsync("MonsterData", ct);
+        // Monster Prefab 로드
+        await AssetManager.Instance.LoadAssetsByLabelAsync("Monster", ct);
 
-        // 딕셔너리에 저장
-        foreach (string key in Itemkeys)
+        // MonsterId Mapping
+        AssetManager.Instance.TryGetAsset(AddressKeys.MonsterMappingTable, out MonsterMappingTable table);
+        Debug.Log($"{table.mappings.Count}");
+        foreach(var map in table.mappings)
         {
-            if (AssetManager.Instance.TryGetAsset<MonsterDataSO>(key, out MonsterDataSO monster))
-            {
-                if (!monsterTable.ContainsKey(key))
-                    monsterTable.Add(key, monster);
-            }
+            string address = map.path;
+            Debug.Log($"{address}");
+            monsterPathTable.Add(map.id, address);
         }
+
 
     }
 }

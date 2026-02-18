@@ -20,7 +20,7 @@ public class Player : Unit, IInItable, IHitable
     [SerializeField] GameObject weponParent; // 무기 회전 object
     [SerializeField] Weapon weapon; // 장착한 무기
 
-    float interactRange = 1.0f; // 상호작용 범위
+    float interactRange; // 상호작용 범위
     bool isFlip = false; // 바라보는 방향
     Vector3 attackDir;
 
@@ -35,7 +35,7 @@ public class Player : Unit, IInItable, IHitable
         movement.Speed = 5f;
         interactRange = 1.0f;
         isFlip = false;
-        stat.Atk = 50;
+        stat.Atk = 10;
     }
     public void Initialize(InitData data = default)
     {
@@ -223,7 +223,7 @@ public class Player : Unit, IInItable, IHitable
 
         Vector2 origin = weponParent.transform.position;
         // 마우스 방향 계산
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mousePos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         Vector2 forward = ((Vector2)mousePos - origin).normalized;
 
         // 원형 범위 그리기
@@ -314,6 +314,9 @@ public class Player : Unit, IInItable, IHitable
     /// <param name="atk"></param>
     public void Hit(int atk)
     {
+        if (stat.IsInvincible)
+            return;
+
         stat.Hp -= atk;
     }
 
@@ -326,7 +329,7 @@ public class Player : Unit, IInItable, IHitable
         if (state != InputState.Started)
             return;
 
-        attackDir = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        attackDir = mainCamera.ScreenToWorldPoint(Input.mousePosition);
         weapon?.Attack();
 
     }
@@ -352,14 +355,13 @@ public class Player : Unit, IInItable, IHitable
         for (int i = 0; i < count; i++)
         {
             if (targets[i] == null) continue;
-
+            
             Vector2 dirToTarget = ((Vector2)targets[i].transform.position - attackOrigin).normalized;
             float dot = Vector2.Dot(forward, dirToTarget);
 
-            // Dot 0.5는 정면 기준 +-60도(총 120도) 범위입니다.
+            // Dot 0.5는 정면 기준 +-60도(총 120도) 범위
             if (dot >= 0.5f)
             {
-                // 트리거가 체크된 콜라이더만 Hit 판정을 진행함
                 if (targets[i] == null || targets[i].isTrigger == false) continue;
 
                 if (targets[i].TryGetComponent<IHitable>(out var hitable))

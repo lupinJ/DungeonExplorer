@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class SoundManager : WeakSingleton<SoundManager>
 {
-    public PoolData data;
-
     [SerializeField]
     float bgmVolume = 0.5f;
     [SerializeField]
@@ -16,6 +14,7 @@ public class SoundManager : WeakSingleton<SoundManager>
 
     Dictionary<string, AudioClip> clipDic;
     ObjectPool soundPool;
+    GameObject prefab;
 
     GameObject bgmObj; // bgm
 
@@ -27,8 +26,8 @@ public class SoundManager : WeakSingleton<SoundManager>
         {
             clipDic.Add($"{clip.name}", clip);
         }
-        
-        soundPool = new ObjectPool(data);
+
+        soundPool = new ObjectPool(prefab, null, 5);
     }
 
     private void Start()

@@ -13,6 +13,8 @@ public interface IInItable
 }
 public class LoadManager : Singleton<LoadManager>
 {
+    bool first_loading = false;
+
     protected override void Init()
     {
         SceneManager.sceneLoaded += OnSceneLoaded;
@@ -63,14 +65,15 @@ public class LoadManager : Singleton<LoadManager>
         // 4. 게임을 시작한다.
         InputManager.Instance.InputEnableAll();
     }
-    
+#pragma warning disable CS1998
+
     private async UniTaskVoid UnLoading(string name)
     {
         AssetManager.Instance.UnloadByLabel($"{name}UI");
         AssetManager.Instance.UnloadByLabel($"{name}Game");
 
     }
-
+#pragma warning restore CS1998
     private void OnApplicationQuit()
     {
         FirstUnLoading().Forget();

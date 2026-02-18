@@ -41,6 +41,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - GameSceneUI
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 811ee074e7b43d942aa4179a4106ad83
+    m_Address: Assets/06_Data/00_ScriptableObject/03_Mappping/MonsterMappingTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - MonsterData
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bb4a238aa29a567408c0a2883ceecc20
     m_Address: Assets/06_Data/00_ScriptableObject/00_ItemDataSO/01_Potion/HealthPotion.asset
     m_ReadOnly: 0
@@ -68,14 +74,13 @@ MonoBehaviour:
   - m_GUID: eb0ca202ef8815543b45d73dcc56c058
     m_Address: Assets/06_Data/00_ScriptableObject/02_MonsterDataSO/GoblinData.asset
     m_ReadOnly: 0
-    m_SerializedLabels:
-    - MonsterData
+    m_SerializedLabels: []
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f7f944e629e6070429dd5e88ca2d9423
     m_Address: Assets/02_Prefab/03_Monster/Goblin.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
-    - GameSceneGame
+    - Monster
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ffc560bf96c833744b787e05216f8e52
     m_Address: Assets/06_Data/00_ScriptableObject/00_ItemDataSO/01_Potion/ManaPotion.asset
