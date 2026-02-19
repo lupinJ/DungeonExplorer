@@ -14,11 +14,15 @@ public class Player : Unit, IInItable, IHitable
 
     PlayerStat stat; // player 스텟
     Movement movement; // 움직임 계산
+    Skill dash; // dash 스킬
+
     CancellationTokenSource enableToken; // 토큰
     Camera mainCamera; // 카메라 캐싱
 
+    [SerializeField] SkillDataSO dashDataSO; // 대쉬 스킬 정보
     [SerializeField] GameObject weponParent; // 무기 회전 object
     [SerializeField] Weapon weapon; // 장착한 무기
+    
 
     float interactRange; // 상호작용 범위
     bool isFlip = false; // 바라보는 방향
@@ -32,6 +36,13 @@ public class Player : Unit, IInItable, IHitable
         stat = new PlayerStat();
         inventory = new Inventory();
         movement = new Movement();
+        dash = new DashSkill(dashDataSO, new SkillContext
+        {
+            owner = this,
+            movement = this.movement,
+            stat = this.stat,
+            indicator = null
+        });
         movement.Speed = 5f;
         interactRange = 1.0f;
         isFlip = false;
@@ -70,7 +81,9 @@ public class Player : Unit, IInItable, IHitable
             EventManager.Instance.Unsubscribe<InputManager.MoveEvent, MoveArgs>(Move);
             EventManager.Instance.Unsubscribe<InputManager.DashEvent, InputState>(Dash);
             EventManager.Instance.Unsubscribe<InputManager.InteractEvent, InputState>(Interact);
-        }        
+        }
+
+        dash = null;
     }
 
     public bool TryHeal(int value)
@@ -165,12 +178,8 @@ public class Player : Unit, IInItable, IHitable
         if (state != InputState.Started)
             return;
 
-        // Mp 소모
-        if (stat.Mp < 10)
-            return;
-        stat.Mp -= 10;
-
-        DashAsync(enableToken.Token).Forget();
+        dash.Activate(null, 0, enableToken.Token);
+        //DashAsync(enableToken.Token).Forget();
     }
 
     
@@ -241,25 +250,6 @@ public class Player : Unit, IInItable, IHitable
     }
 #endif
     /// <summary>
-    /// player 대쉬 처리
-    /// </summary>
-    /// <returns></returns>
-    public async UniTaskVoid DashAsync(CancellationToken ct)
-    {
-        
-        anim.SetBool("IsDash", true);
-        movement.Speed += 12f;
-        movement.IsLockon = true;
-
-        await UniTask.WaitForSeconds(0.2f, false, PlayerLoopTiming.Update, enableToken.Token);
-
-        movement.Speed -= 12f;
-        movement.IsLockon = false;
-        movement.Dir = InputManager.Instance.MoveInput; // movement 갱신
-        anim.SetBool("IsDash", false);
-    }
-
-    /// <summary>
     /// player 무기 장착
     /// </summary>
     /// <param name="obj"></param>
@@ -318,6 +308,7 @@ public class Player : Unit, IInItable, IHitable
             return;
 
         stat.Hp -= atk;
+        stat.InvincibleAsync(0.2f, enableToken.Token).Forget(); // 피격 무적
     }
 
     /// <summary>
@@ -374,6 +365,8 @@ public class Player : Unit, IInItable, IHitable
 
     public void PlayerDie(bool isDie)
     {
-
+        // 사망 애니메이션
+        // 움직임 봉쇄
+        // GameOver처리(GameManager) - Event 연결 or 직접 호출
     }
 }

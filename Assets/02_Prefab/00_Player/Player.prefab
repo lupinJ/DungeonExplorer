@@ -157,6 +157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fac53cdf0ad630f46ad995e478963b83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dashDataSO: {fileID: 11400000, guid: 9dc9db9cef4f5a540b2345557bf7b6a9, type: 2}
   weponParent: {fileID: 1329576041183095345}
   weapon: {fileID: 0}
 --- !u!50 &3490372488660598132

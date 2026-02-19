@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public struct PointArg
@@ -63,6 +65,24 @@ public class Stat
         isInvincible = 0;
     }
 
+    public async UniTaskVoid InvincibleAsync(float coolTime, CancellationToken ct)
+    {
+        IsInvincible = true;
+
+        try
+        {    
+            await UniTask.Delay(TimeSpan.FromSeconds(coolTime), cancellationToken: ct);
+        }
+        catch(System.OperationCanceledException)
+        {
+            
+        }
+        finally
+        {
+            IsInvincible = false;
+        }
+        
+    }
 
     public int MaxHp
     {
@@ -136,7 +156,11 @@ public class Stat
             if (value)
                 isInvincible++;
             else
+            {
                 isInvincible--;
+                if(isInvincible < 0)
+                    isInvincible = 0;
+            }
         }
     }
 }

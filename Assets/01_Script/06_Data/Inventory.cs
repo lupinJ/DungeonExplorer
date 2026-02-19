@@ -23,6 +23,7 @@ public class Inventory
 
     public void FillInventory(List<ItemId> list)
     {
+        // item Test Data(추후 수정)
         items.Clear();
         items.Add(ItemFactory.CreateItem(ItemId.Katana));
         items.Add(ItemFactory.CreateItem(ItemId.Katana));
