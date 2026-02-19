@@ -57,6 +57,7 @@ public class LoadManager : Singleton<LoadManager>
         // 2. 처음부터 존재하는 객체는 만든다.
         GameManager.Instance.OnSceneLoadedCreate(gameList);
         UIManager.Instance.OnSceneLoadedCreate(uIList);
+        PoolManager.Instance.OnSceneLoadCreate();
 
         //3. 초기화한다.(외부참조, 이벤트구독)
         UIManager.Instance.OnSceneLoadedInit();

@@ -36,7 +36,7 @@ public abstract class Skill
         curCooltime = 0;
     }
 
-    public abstract UniTask Activate(Transform target, int atk, CancellationToken ct);
+    public abstract UniTask Activate(Transform target, int value, CancellationToken ct);
     public virtual void Reset() { curCooltime = 0; }
 }
 

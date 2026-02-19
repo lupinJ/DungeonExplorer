@@ -12,8 +12,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] private Vector3 offset = new Vector3(0, 0, -10);
 
     [Header("Follow Settings")]
-    [SerializeField] private float followDuration = 0.2f; // 카메라가 도달하는 시간
-    [SerializeField] private Ease followEase = Ease.Linear;
+    [SerializeField] private float smoothTime = 0.15f;
+    private Vector3 _currentVelocity;
 
     private CancellationTokenSource cts;
 
@@ -31,16 +31,15 @@ public class CameraController : MonoBehaviour
             {
                 Vector3 targetPos = target.position + offset;
 
-                await transform.DOMove(targetPos, followDuration)
-                    .SetEase(followEase)
-                    .SetLink(gameObject)
-                    .ToUniTask(TweenCancelBehaviour.Kill, ct);
+                transform.position = Vector3.SmoothDamp(
+                    transform.position,
+                    targetPos,
+                    ref _currentVelocity,
+                    smoothTime
+                );
             }
-            else
-            {
-                // 타겟이 없으면 다음 프레임 대기
-                await UniTask.Yield(PlayerLoopTiming.Update, ct);
-            }
+
+            await UniTask.Yield(PlayerLoopTiming.LastPostLateUpdate, ct);
         }
     }
 

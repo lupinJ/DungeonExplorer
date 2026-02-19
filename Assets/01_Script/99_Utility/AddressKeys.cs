@@ -13,6 +13,8 @@ public static class AddressKeys
 
     public static readonly string MonsterMappingTable = "Assets/06_Data/00_ScriptableObject/03_Mappping/MonsterMappingTable.asset";
 
+    public static readonly string TreasureBox = "Assets/02_Prefab/04_Npc/TreasureBox.prefab";
+
     public static readonly string HealthPotion = "Assets/06_Data/00_ScriptableObject/00_ItemDataSO/01_Potion/HealthPotion.asset";
 
     public static readonly string Katana = "Assets/06_Data/00_ScriptableObject/01_WeaponItemDataSO/Katana.asset";

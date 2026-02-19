@@ -47,6 +47,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - MonsterData
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9b3249fcae28fed409996cf729138b71
+    m_Address: Assets/02_Prefab/04_Npc/TreasureBox.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bb4a238aa29a567408c0a2883ceecc20
     m_Address: Assets/06_Data/00_ScriptableObject/00_ItemDataSO/01_Potion/HealthPotion.asset
     m_ReadOnly: 0

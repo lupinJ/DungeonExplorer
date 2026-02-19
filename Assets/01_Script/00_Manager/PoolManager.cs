@@ -5,15 +5,25 @@ using UnityEngine;
 public class PoolManager : Singleton<PoolManager>
 {
     Dictionary<string, ObjectPool> poolDic = new();
+    Transform root;
 
+    public void OnSceneLoadCreate()
+    {
+        GameObject obj = new GameObject("OjbectPool");
+        root = obj.transform;
+    }
     public GameObject Instanciate(string key)
     {
         if (!poolDic.TryGetValue(key, out ObjectPool pool))
         {
             if (!AssetManager.Instance.TryGetAsset(key, out GameObject obj))
                 return null;
+
+            GameObject root = new GameObject(key);
+            root.transform.SetParent(this.root);
+
             obj.name = key;
-            pool = new ObjectPool(obj,null, 1);
+            pool = new ObjectPool(obj, root.transform, 1);
             poolDic.Add(key, pool);
         }
 

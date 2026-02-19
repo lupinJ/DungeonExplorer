@@ -33,6 +33,7 @@ public class ObjectPool
         GameObject obj = GameObject.Instantiate(prefab, root);
         obj.name = key;
         obj.SetActive(false);
+        obj.transform.SetParent(root);
         pool.Enqueue(obj);
         return obj;
     }
