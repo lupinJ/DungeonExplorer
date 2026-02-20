@@ -33,12 +33,26 @@ MonoBehaviour:
     m_Address: Assets/02_Prefab/00_Player/Player.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
+    - DungeonSceneGame
     - GameSceneGame
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4608dbe518647894a9de6a4333aab4d1
+    m_Address: Assets/06_Data/00_ScriptableObject/03_Mappping/UIMappingTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UIData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 472c7eb20229fda4e8ca95926aeb0790
+    m_Address: Assets/02_Prefab/01_UI/GameCanvas.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - UI
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 4b5810310ca7c8e44ac768775873b957
     m_Address: Assets/02_Prefab/01_UI/InventoryUI.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
+    - DungeonSceneUI
     - GameSceneUI
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 811ee074e7b43d942aa4179a4106ad83
@@ -69,6 +83,7 @@ MonoBehaviour:
     m_Address: Assets/02_Prefab/01_UI/HpBarUI.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
+    - DungeonSceneUI
     - GameSceneUI
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: ced89abd117a74e47a27287712958651

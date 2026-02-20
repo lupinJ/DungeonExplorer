@@ -53,7 +53,14 @@ public class InputManager : Singleton<InputManager>,
 
     private void Start()
     {
+        input.GameUI.Enable();
+        input.GameUI.SetCallbacks(this);
+
+        input.Player.Enable();
+        input.Player.SetCallbacks(this);
+
         EventAdd();
+
     }
     public void EventAdd()
     {
@@ -66,7 +73,7 @@ public class InputManager : Singleton<InputManager>,
     /// <summary>
     /// ΩÃ±€≈Ê º“∏Í Ω√
     /// </summary>
-    private void OnDestroy()
+    private void OnApplicationQuit()
     {
         if (EventManager.Instance != null)
         {
@@ -76,24 +83,12 @@ public class InputManager : Singleton<InputManager>,
             EventManager.Instance.RemoveEvent<AttackEvent>();
         }
 
-    }
-
-    private void OnEnable()
-    {
-        input.GameUI.Enable();
-        input.GameUI.SetCallbacks(this);
-
-        input.Player.Enable();
-        input.Player.SetCallbacks(this);
-    }
-
-    private void OnDisable()
-    {
         input.GameUI.Disable();
         input.GameUI.RemoveCallbacks(this);
 
         input.Player.Disable();
         input.Player.RemoveCallbacks(this);
+
     }
 
     public void InputEnableAll()
@@ -142,7 +137,7 @@ public class InputManager : Singleton<InputManager>,
         if (!context.started)
             return;
 
-        if (UIManager.Instance.TryGetPanel(AddressKeys.InventoryUI, out UIBase uiBase))
+        if (UIManager.Instance.TryGetPanel(UIName.Inventory, out UIBase uiBase))
         {
             PopupUI inventory = uiBase as PopupUI;
             if (inventory.IsActive)

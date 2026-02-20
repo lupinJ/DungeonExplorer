@@ -12,6 +12,16 @@ public class PoolManager : Singleton<PoolManager>
         GameObject obj = new GameObject("OjbectPool");
         root = obj.transform;
     }
+
+    public void OnSceneUnLoadDestroy()
+    {
+        Clear();
+        if (root != null)
+        {
+            GameObject.Destroy(root.gameObject);
+            root = null;
+        }
+    }
     public GameObject Instanciate(string key)
     {
         if (!poolDic.TryGetValue(key, out ObjectPool pool))

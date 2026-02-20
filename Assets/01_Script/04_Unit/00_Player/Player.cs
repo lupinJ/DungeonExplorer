@@ -81,6 +81,9 @@ public class Player : Unit, IInItable, IHitable
             EventManager.Instance.Unsubscribe<InputManager.MoveEvent, MoveArgs>(Move);
             EventManager.Instance.Unsubscribe<InputManager.DashEvent, InputState>(Dash);
             EventManager.Instance.Unsubscribe<InputManager.InteractEvent, InputState>(Interact);
+            EventManager.Instance.Unsubscribe<InputManager.AttackEvent, InputState>(Attack);
+            inventory.Reset();
+            stat.Reset();
         }
 
         dash = null;

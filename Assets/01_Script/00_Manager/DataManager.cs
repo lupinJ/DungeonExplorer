@@ -20,8 +20,8 @@ public class DataManager : Singleton<DataManager>
 
     int maxInventory = 24; // 임시
     Dictionary<ItemId, ItemDataSO> itemTable = new();
-    //Dictionary<string, MonsterDataSO> monsterTable = new();
     Dictionary<MonsterId, string> monsterPathTable = new();
+    Dictionary<UIName, string> uiPathTable = new();
 
     public SaveData Data {  
         get { return saveData; }
@@ -51,6 +51,18 @@ public class DataManager : Singleton<DataManager>
             return true;
         }
         
+        key = null;
+        return false;
+    }
+
+    public bool TryGetUIPath(UIName name, out string key)
+    {
+        if(uiPathTable.TryGetValue(name, out string path))
+        {
+            key = path;
+            return true;
+        }
+
         key = null;
         return false;
     }
@@ -110,20 +122,25 @@ public class DataManager : Singleton<DataManager>
     public async UniTask LoadMonsterDataAsync(CancellationToken ct)
     {
         // SO Data 로드
-        List<string> Itemkeys = await AssetManager.Instance.LoadAssetsByLabelAsync("MonsterData", ct);
-        // Monster Prefab 로드
-        await AssetManager.Instance.LoadAssetsByLabelAsync("Monster", ct);
+        await AssetManager.Instance.LoadAssetsByLabelAsync("MonsterData", ct);
 
         // MonsterId Mapping
         AssetManager.Instance.TryGetAsset(AddressKeys.MonsterMappingTable, out MonsterMappingTable table);
-        Debug.Log($"{table.mappings.Count}");
-        foreach(var map in table.mappings)
+        foreach (var map in table.mappings)
         {
-            string address = map.path;
-            Debug.Log($"{address}");
-            monsterPathTable.Add(map.id, address);
+            monsterPathTable.Add(map.id, map.path);
         }
 
+    }
 
+    public async UniTask LoadUIDataAsync(CancellationToken ct)
+    {
+        await AssetManager.Instance.LoadAssetsByLabelAsync("UIData", ct);
+
+        AssetManager.Instance.TryGetAsset(AddressKeys.UIMappingTable, out UIMappingTable table);
+        foreach (var map in table.mappings)
+        {
+            uiPathTable.Add(map.id, map.path);
+        }
     }
 }

@@ -36,7 +36,7 @@ public abstract class Monster : Unit,
     {
         if (stat.IsInvincible)
             return;
-        Debug.Log($"Before Hp = {stat.Hp}, Demege = {atk}");
+        
         stat.Hp -= atk;
     }
 

@@ -9,6 +9,8 @@ public static class AddressKeys
 
     public static readonly string Player = "Assets/02_Prefab/00_Player/Player.prefab";
 
+    public static readonly string GameCanvas = "Assets/02_Prefab/01_UI/GameCanvas.prefab";
+
     public static readonly string InventoryUI = "Assets/02_Prefab/01_UI/InventoryUI.prefab";
 
     public static readonly string MonsterMappingTable = "Assets/06_Data/00_ScriptableObject/03_Mappping/MonsterMappingTable.asset";
@@ -28,5 +30,7 @@ public static class AddressKeys
     public static readonly string Goblin = "Assets/02_Prefab/03_Monster/Goblin.prefab";
 
     public static readonly string ManaPotion = "Assets/06_Data/00_ScriptableObject/00_ItemDataSO/01_Potion/ManaPotion.asset";
+
+    public static readonly string UIMappingTable = "Assets/06_Data/00_ScriptableObject/03_Mappping/UIMappingTable.asset";
 
 }

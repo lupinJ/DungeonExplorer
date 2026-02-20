@@ -128,7 +128,7 @@ public class AssetManager : Singleton<AssetManager>
         await UniTask.WhenAll(loadTasks);
         Addressables.Release(locationsHandle);
 
-        return newlyLoadedPaths;
+        return labelDic[label].ToList(); ;
     }
 
     public void Unload(string key)

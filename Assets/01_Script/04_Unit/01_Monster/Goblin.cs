@@ -41,12 +41,11 @@ public class Goblin : Monster
     private async UniTaskVoid Birth(CancellationToken ct)
     {
         anim.SetBool("IsBirth", true);
-        stat.IsInvincible = true;
+        stat.InvincibleAsync(data.birthTime, ct).Forget();
 
         await UniTask.Delay(TimeSpan.FromSeconds(data.birthTime), cancellationToken: ct);
 
         anim.SetBool("IsBirth", false);
-        stat.IsInvincible = false;
 
         FixedMoveAsync(ct).Forget();
         RunBTRoutine(ct).Forget();

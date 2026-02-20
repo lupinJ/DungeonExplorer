@@ -21,6 +21,10 @@ public class Inventory
         FillInventory(null);
     }
 
+    public void Reset()
+    {
+        EventManager.Instance.RemoveEvent<InventoryChangedEvent>();
+    }
     public void FillInventory(List<ItemId> list)
     {
         // item Test Data(추후 수정)

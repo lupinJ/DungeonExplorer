@@ -25,6 +25,12 @@ public class PlayerStat : Stat
         this.Atk = 0;
     }
 
+    public void Reset()
+    {
+        EventManager.Instance.RemoveEvent<HpEvent>();
+        EventManager.Instance.RemoveEvent<MpEvent>();
+    }
+
     public void OnHpChanged(PointArg arg)
     {
         hpEvent?.Invoke(arg);
