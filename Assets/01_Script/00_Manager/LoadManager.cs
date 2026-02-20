@@ -23,7 +23,7 @@ public class LoadManager : Singleton<LoadManager>
 
     public void LoadScene(string name)
     {
-        UnLoading(name);
+        UnLoading(SceneManager.GetActiveScene().name);
         SceneManager.LoadScene(name);
     }
 

@@ -26,7 +26,7 @@ public class SlotItemDragUI : UIBase
         ct?.Dispose();
         ct = new CancellationTokenSource();
 
-        image.sprite = item.data.image;
+        image.sprite = item.Image;
         image.enabled = true;
         DragAsync(ct.Token).Forget();
     }

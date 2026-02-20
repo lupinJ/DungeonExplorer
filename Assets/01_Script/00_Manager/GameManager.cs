@@ -38,7 +38,7 @@ public class GameManager : Singleton<GameManager>
 
     public void OnSceneLoadedInit()
     {
-        player.Initialize();
+        player?.Initialize();
     }
 
     private void Update()
@@ -55,6 +55,10 @@ public class GameManager : Singleton<GameManager>
         if(Input.GetKeyDown(KeyCode.Alpha2))
         {
             LoadManager.Instance.LoadScene("DungeonScene");
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            LoadManager.Instance.LoadScene("StartScene");
         }
     }
 }

@@ -45,7 +45,7 @@ public class Inventory
     { 
         for (int i = 0; i < items.Count; i++)
         {
-            if (items[i].data.id == ItemId.None)
+            if (items[i].Id == ItemId.None)
             {
                 items[i] = item;
                 items[i].PickUp();
@@ -64,7 +64,7 @@ public class Inventory
     {
         if (index < 0 || index >= items.Count)
             return;
-        if (items[index].data.id == ItemId.None)
+        if (items[index].Id == ItemId.None)
             return;
 
         items[index].Drop(); // stat을 빼거나 장비해제하거나
@@ -108,7 +108,7 @@ public class Inventory
     public void SwapItem(int index1, int index2)
     {
         // 아이템 합치기
-        if (items[index1].data.id == items[index2].data.id)
+        if (items[index1].Id == items[index2].Id)
         {
             if(items[index1] is CountableItem)
             {

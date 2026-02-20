@@ -9,25 +9,34 @@ using System;
 public class SlotUI : UIBase, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler,
     IPointerEnterHandler, IPointerExitHandler
 {
-    // 클릭(사용), 스위칭, 버림 event 필요
-    [SerializeField] InventoryUI inventoryUI;
+    protected int index;
+    protected Item item;
+    protected Image image;
 
-    public int index;
-    public Image image;
+    [SerializeField] Image ItemImage; 
+    [SerializeField] TextMeshProUGUI text;
 
-    public Image ItemImage;
-    public TextMeshProUGUI text;
+    [SerializeField] Sprite activeImage;
+    [SerializeField] Sprite inActiveImage;
 
-    public Item item;
-    public Sprite activeImage;
-    public Sprite inActiveImage;
-
+    // event
     public event Action<int> onItemClicked;
     public event Action<int, int> onItemSwap;
     public event Action<int> onItemDrop;
     public event Action<Item> onDragStart;
     public event Action onDragEnd;
 
+    public int Index
+    {
+        get { return index; }
+        set { index = value; }
+    }
+
+    public Item Item
+    {
+        get { return item; }
+        set { item = value; }
+    }
     private void Awake()
     {
         image = GetComponent<Image>();
@@ -45,7 +54,7 @@ public class SlotUI : UIBase, IPointerClickHandler, IPointerDownHandler, IPointe
             text.text = "";
             return;
         }
-        else if (item.data.id == ItemId.None)
+        else if (item.Id == ItemId.None)
         {
             ItemImage.enabled = false;
         }
@@ -56,7 +65,7 @@ public class SlotUI : UIBase, IPointerClickHandler, IPointerDownHandler, IPointe
 
         // Item 표시
         image.sprite = activeImage;
-        ItemImage.sprite = item.data.image;
+        ItemImage.sprite = item.Image;
 
         // text 표시
         if (item is CountableItem cItem)
@@ -89,7 +98,7 @@ public class SlotUI : UIBase, IPointerClickHandler, IPointerDownHandler, IPointe
         //down 되었을 시
         if (item == null)
             return;
-        if (item.data.id == ItemId.None)
+        if (item.Id == ItemId.None)
             return;
 
         onDragStart?.Invoke(this.item);
@@ -108,7 +117,7 @@ public class SlotUI : UIBase, IPointerClickHandler, IPointerDownHandler, IPointe
 
         if (eventData.pointerEnter == null)
         {
-            if(!(item.data.id == ItemId.None))
+            if(!(item.Id == ItemId.None))
                 onItemDrop?.Invoke(index);
             return;
         }

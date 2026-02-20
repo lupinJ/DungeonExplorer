@@ -9,8 +9,11 @@ struct ItemArg : InitData
 
 public class Item : IInItable
 {
-    public ItemDataSO data;
-    
+    protected ItemDataSO data;
+
+    public ItemId Id => data.id;
+    public Sprite Image => data.image;
+
     public Item() { }
 
     public virtual void Initialize(InitData data) 

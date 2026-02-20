@@ -78,8 +78,15 @@ public class HpBarUI : UIBase, IInItable
 
         }
     }
+
     private void OnDestroy()
     {
+        if (EventManager.Instance != null)
+        {
+            EventManager.Instance.Unsubscribe<PlayerStat.HpEvent, PointArg>(OnHpChanged);
+            EventManager.Instance.Unsubscribe<PlayerStat.MpEvent, PointArg>(OnMpChanged);
+        }
+
         hpCts?.Cancel();
         hpCts?.Dispose();
         mpCts?.Cancel();

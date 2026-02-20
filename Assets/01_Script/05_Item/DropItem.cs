@@ -23,7 +23,7 @@ public class DropItem : MonoBehaviour, IInItable, IInteractable
         {
             transform.position = data.position;
             this.item = data.item;
-            sprite.sprite = item.data.image;
+            sprite.sprite = item.Image;
         }
         else
         {

@@ -23,7 +23,7 @@ public class InventoryUI : PopupUI, IInItable
         
         for(int i=0; i <  slots.Count; i++)
         {
-            slots[i].index = i;
+            slots[i].Index = i;
             slots[i].onItemSwap += SlotSwap;
             slots[i].onItemClicked += SlotClick;
             slots[i].onItemDrop += SlotDrop;
@@ -35,6 +35,13 @@ public class InventoryUI : PopupUI, IInItable
         this.HidePanel();
     }
 
+    private void OnDestroy()
+    {
+        if (EventManager.Instance != null)
+        {
+            EventManager.Instance.Unsubscribe<Inventory.InventoryChangedEvent, Inventory>(OnInventoryChanged);
+        }
+    }
     public void SlotSwap(int index1, int index2) 
     {
         inventory.SwapItem(index1, index2);
@@ -63,13 +70,13 @@ public class InventoryUI : PopupUI, IInItable
         List<Item> list = inventory.items;
         for(int i = 0; i < list.Count; i++)
         {
-            slots[i].item = list[i];
+            slots[i].Item = list[i];
             slots[i].RefreshUI();
         }
         
         for(int i = list.Count; i < slots.Count; i++)
         {
-            slots[i].item = null;
+            slots[i].Item = null;
             slots[i].RefreshUI();
         }
     }

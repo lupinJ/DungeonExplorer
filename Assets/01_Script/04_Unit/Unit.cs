@@ -13,7 +13,6 @@ public abstract class Unit : MonoBehaviour
 
     protected virtual void Awake()
     {
-        Debug.Log("awake");
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
