@@ -9,7 +9,7 @@ public class PotionItem : CountableItem
     public override void Initialize(InitData data)
     {
         base.Initialize(data);
-        if (data is CountableItemArg arg)
+        if (data is ItemArg arg)
         {
             pData = arg.itemDataSO as PotionDataSO;
         }

@@ -4,6 +4,6 @@ using UnityEngine;
 
 public abstract class Npc : Unit, IInteractable
 {
-    public abstract void Interact();
+    public abstract void Interact(Player player);
    
 }

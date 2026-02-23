@@ -5,7 +5,7 @@ using System.Threading;
 using UnityEngine;
 
 interface IInteractable {
-    public void Interact();
+    public void Interact(Player player);
 }
 
 public class Player : Unit, IInItable, IHitable
@@ -218,7 +218,7 @@ public class Player : Unit, IInItable, IHitable
             
             if (closestTarget.TryGetComponent<IInteractable>(out var interactable))
             {
-                interactable.Interact();
+                interactable.Interact(this);
             }
             else
                 Debug.Log($"try failed");

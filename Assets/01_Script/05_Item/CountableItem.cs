@@ -2,11 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-struct CountableItemArg : InitData
-{
-    public ItemDataSO itemDataSO;
-    public int count;
-}
 
 public class CountableItem : Item
 {
@@ -17,6 +12,9 @@ public class CountableItem : Item
         get { return count; }
         set { count = value; }
     }
+
+    public int MaxCount => data.maxCount;
+    
     public CountableItem()  { }
 
     public override void Initialize(InitData data)
@@ -24,12 +22,7 @@ public class CountableItem : Item
         if(data is ItemArg ItemArg)
         {
             this.data = ItemArg.itemDataSO as ItemDataSO;
-            count = 1;
-        }
-        else if (data is CountableItemArg CountArg)
-        {
-            this.data = CountArg.itemDataSO as ItemDataSO;
-            count = CountArg.count;
+            count = ItemArg.count;
         }
 
     }

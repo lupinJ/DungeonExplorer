@@ -31,8 +31,9 @@ public class Inventory
         items.Clear();
         items.Add(ItemFactory.CreateItem(ItemId.Katana));
         items.Add(ItemFactory.CreateItem(ItemId.Katana));
-        items.Add(ItemFactory.CreateItem(ItemId.HealthPotion, 11));
-        items.Add(ItemFactory.CreateItem(ItemId.ManaPotion, 9));
+        items.Add(ItemFactory.CreateItem(new ItemDropInfo { id = ItemId.HealthPotion, count = 11 }));
+        items.Add(ItemFactory.CreateItem(new ItemDropInfo { id = ItemId.ManaPotion, count = 97 }));
+
         for (int i = 0; i < 20; i++)
             items.Add(ItemFactory.CreateItem(ItemId.None));
     }
@@ -42,7 +43,10 @@ public class Inventory
     /// </summary>
     /// <param name="item"></param>
     public void AddItem(Item item)
-    { 
+    {
+        if (item == null || item.Id == ItemId.None)
+            return;
+
         for (int i = 0; i < items.Count; i++)
         {
             if (items[i].Id == ItemId.None)
@@ -50,6 +54,17 @@ public class Inventory
                 items[i] = item;
                 items[i].PickUp();
                 break;
+            }
+
+            if (TryMoveCountableItem(item, items[i]))
+            {
+                if (item is not CountableItem cItem)
+                    return;
+
+                if (cItem.Count > 0)
+                    continue;
+                else
+                    break;
             }
         }
 
@@ -70,19 +85,12 @@ public class Inventory
         items[index].Drop(); // stat을 빼거나 장비해제하거나
 
         // DropItem 생성, player 위치에 떨어뜨린다.
-        if (AssetManager.Instance.TryGetAsset<GameObject>(AddressKeys.DropItem, out GameObject dropItem))
+        IInItable obj = PoolManager.Instance.Instanciate(AddressKeys.DropItem).GetComponent<DropItem>();
+        obj.Initialize(new DropItemArg
         {
-            IInItable obj = GameObject.Instantiate(dropItem).GetComponent<DropItem>();
-            obj.Initialize(new DropItemArg
-            {
-                position = GameManager.Instance.player.transform.position,
-                item = items[index]
-            });
-        }
-        else
-        {
-            Debug.Log($"Asset {AddressKeys.DropItem} is null");
-        }
+            position = GameManager.Instance.player.transform.position,
+            item = items[index]
+        });   
 
         // 떨궜으니 인벤을 비운다.
         items[index] = ItemFactory.CreateItem(ItemId.None);
@@ -107,12 +115,15 @@ public class Inventory
 
     public void SwapItem(int index1, int index2)
     {
-        // 아이템 합치기
-        if (items[index1].Id == items[index2].Id)
-        {
-            if(items[index1] is CountableItem)
-            {
+        if (index1 == index2)
+            return;
 
+        // 같은 물건을 합칠 경우
+        if (TryMoveCountableItem(items[index1], items[index2]))
+        {
+            if (items[index1] is CountableItem item && item.Count == 0)
+            {
+                items[index1] = ItemFactory.CreateItem(ItemId.None);
             }
         }
         else
@@ -120,8 +131,9 @@ public class Inventory
             Item temp = items[index1];
             items[index1] = items[index2];
             items[index2] = temp;
-            inventoryChangedEvent.Invoke(this);
         }
+
+        inventoryChangedEvent.Invoke(this);
         
     }
 
@@ -133,5 +145,21 @@ public class Inventory
         int index = items.IndexOf(weapon);
 
         UseItem(index);
+    }
+
+    private bool TryMoveCountableItem(Item from ,  Item to)
+    {
+        if (from == null || to == null)
+            return false;
+        if (from.Id != to.Id)
+            return false;
+        if (from is not CountableItem cntFrom || to is not CountableItem cntTo)
+            return false;
+
+        int addCnt = Mathf.Min(cntTo.MaxCount - cntTo.Count, cntFrom.Count);
+        cntTo.Count += addCnt;
+        cntFrom.Count -= addCnt;
+
+        return addCnt > 0;
     }
 }

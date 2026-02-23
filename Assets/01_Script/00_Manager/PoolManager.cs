@@ -27,7 +27,10 @@ public class PoolManager : Singleton<PoolManager>
         if (!poolDic.TryGetValue(key, out ObjectPool pool))
         {
             if (!AssetManager.Instance.TryGetAsset(key, out GameObject obj))
+            {
+                Debug.LogError($"Asset {key} is null");
                 return null;
+            }
 
             GameObject root = new GameObject(key);
             root.transform.SetParent(this.root);

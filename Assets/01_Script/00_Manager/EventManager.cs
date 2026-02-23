@@ -48,8 +48,9 @@ public class EventManager : Singleton<EventManager>
         
     }
 
-    private void OnApplicationQuit()
+    protected override void OnApplicationQuit()
     {
+        base.OnApplicationQuit();
         eventDic?.Clear();
         waitDic?.Clear();
     }

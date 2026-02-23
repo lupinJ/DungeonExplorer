@@ -5,6 +5,7 @@ using UnityEngine;
 struct ItemArg : InitData
 {
     public ItemDataSO itemDataSO;
+    public int count;
 }
 
 public class Item : IInItable

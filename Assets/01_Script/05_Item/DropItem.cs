@@ -45,10 +45,10 @@ public class DropItem : MonoBehaviour, IInItable, IInteractable
             .WithCancellation(cts.Token);
     }
 
-    public void Interact()
+    public void Interact(Player player)
     {
-        GameManager.Instance.player.inventory.AddItem(item);
-        Destroy(this.gameObject);
+        player.inventory.AddItem(item);
+        PoolManager.Instance.Destroy(this.gameObject);
     }
 
     private void Awake()
