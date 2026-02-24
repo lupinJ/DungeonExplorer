@@ -1,10 +1,8 @@
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Goblin : Monster
@@ -14,7 +12,7 @@ public class Goblin : Monster
     protected override void Awake()
     {
         base.Awake();
-        skill = new RangedAttack(skillData, new SkillContext { owner = this, indicator = indicator });
+        skill = new RangedAttack(skillData, new SkillContext { owner = this, indicator = new List<Transform> { indicator } });
         BuildBT();
     }
 
@@ -134,10 +132,10 @@ public class Goblin : Monster
         if (isDead) return; 
         isDead = true;
 
-        // 비동기 처리
+        // 정지처리
         cts?.Cancel();
         cts?.Dispose();
-        cts = null;
+        cts = new CancellationTokenSource();
 
         // 물리 처리
         rigid.velocity = Vector2.zero;
@@ -151,7 +149,7 @@ public class Goblin : Monster
         anim.SetBool("IsDead", true);
 
         // 아이템 드랍, n초후 destroy() 필요
-        DieAsync(2.0f).Forget();
+        DieAsync(2.0f, cts.Token).Forget();
     }
 
   

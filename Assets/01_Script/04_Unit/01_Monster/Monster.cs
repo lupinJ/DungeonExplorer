@@ -21,6 +21,7 @@ public struct MonsterSpawnInfo
 public abstract class Monster : Unit,
     IHitable, IInItable, IPoolable
 {
+    [Header("Monster Info")]
     [SerializeField] protected MonsterDataSO data; // 몬스터 정보
     [SerializeField] protected SkillDataSO skillData; // 공격 정보
     [SerializeField] protected SimpleHpBarUI hpBar; // 몬스터 hpBar UI
@@ -76,9 +77,9 @@ public abstract class Monster : Unit,
             rigid.velocity = movement.Velocity;
         }
     }
-    protected async UniTaskVoid DieAsync(float time)
+    protected async UniTaskVoid DieAsync(float time, CancellationToken ct)
     {
-        await UniTask.WaitForSeconds(time);
+        await UniTask.Delay(TimeSpan.FromSeconds(time), cancellationToken: ct);
         PoolManager.Instance.Destroy(this.gameObject);
     }
 

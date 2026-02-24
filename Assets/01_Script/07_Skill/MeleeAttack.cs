@@ -27,6 +27,7 @@ public class MeleeAttack : Skill
     {
         if (isRunning) return;
         if (target == null) return;
+        if (indicator.Count < 1) return;
 
         try
         {
@@ -36,38 +37,41 @@ public class MeleeAttack : Skill
             currentBoxCenter = (Vector2)owner.transform.position + (dir * boxOffset);
 
             // 인디케이터 연출
-            indicator.gameObject.SetActive(true);
-            indicator.position = (Vector2)owner.transform.position + (dir * (boxOffset - mData.BoxRange.x / 2));
-            indicator.rotation = Quaternion.Euler(0, 0, currentAngle);
-            indicator.localScale = new Vector3(0, mData.BoxRange.y, 1);
-            indicatorRenderer.color = new Color(1, 0, 0, 0.2f); // 연한 빨강
+            indicator[0].gameObject.SetActive(true);
+            indicator[0].position = (Vector2)owner.transform.position + (dir * (boxOffset - mData.BoxRange.x / 2));
+            indicator[0].rotation = Quaternion.Euler(0, 0, currentAngle);
+            indicator[0].localScale = new Vector3(0, mData.BoxRange.y, 1);
+            indicatorRenderer[0].color = new Color(1, 0, 0, 0.2f); // 연한 빨강
 
             // 가로 스케일을 boxSize.x까지 키우고, 색상을 진하게 만듭니다.
-            indicator.DOScaleX(mData.BoxRange.x, mData.startDelay).SetEase(Ease.Linear)
+            indicator[0].DOScaleX(mData.BoxRange.x, mData.startDelay).SetEase(Ease.Linear)
                 .ToUniTask(TweenCancelBehaviour.Kill, cancellationToken: ct).Forget();
-            indicatorRenderer.DOFade(0.6f, mData.startDelay)
+            indicatorRenderer[0].DOFade(0.6f, mData.startDelay)
                 .ToUniTask(TweenCancelBehaviour.Kill, cancellationToken: ct).Forget();
 
+            // 선 딜레이
             await UniTask.Delay(TimeSpan.FromSeconds(mData.startDelay), cancellationToken: ct);
 
-            anim.SetBool("IsAttack", true); // 애니메이션 실행
-            indicator.gameObject.SetActive(false); // 인디케이터 비활성화
+            // 애니메이션 실행
+            ShowAnim(mData.animTime, ct).Forget();
+            indicator[0].gameObject.SetActive(false); // 인디케이터 비활성화
 
-            await UniTask.Delay(TimeSpan.FromSeconds(mData.animTime), cancellationToken: ct);
+            await UniTask.Delay(TimeSpan.FromSeconds(mData.attackTime), cancellationToken: ct);
 
             ExecuteBoxAttack(atk); // 실제 공격 판정
-            anim.SetBool("IsAttack", false); // 애니메이션 종료
 
+            // 후 딜레이
             await UniTask.Delay(TimeSpan.FromSeconds(mData.endDelay), cancellationToken: ct);
 
-            SetCooltime(mData.coolTime, ct).Forget(); // 쿨타임 시작
+            // 쿨타임 시작
+            SetCooltime(mData.coolTime, ct).Forget(); 
         }
         catch (System.OperationCanceledException)
         {
             if (indicator != null)
             {
-                indicator.DOKill();
-                indicator.gameObject.SetActive(false);
+                indicator[0].DOKill();
+                indicator[0].gameObject.SetActive(false);
             }
 
             if (anim != null)
@@ -98,5 +102,12 @@ public class MeleeAttack : Skill
         }
     }
 
+    private async UniTaskVoid ShowAnim(float animTime, CancellationToken ct)
+    {
+        anim.SetBool("IsAttack", true); // 애니메이션 실행
 
+        await UniTask.Delay(TimeSpan.FromSeconds(animTime), cancellationToken: ct).SuppressCancellationThrow();
+
+        anim.SetBool("IsAttack", false); // 애니메이션 종료
+    }
 }

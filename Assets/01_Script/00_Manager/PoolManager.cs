@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PoolManager : Singleton<PoolManager>
@@ -105,7 +104,10 @@ public class PoolManager : Singleton<PoolManager>
     public void Destroy(GameObject obj)
     {
         if (!poolDic.TryGetValue(obj.name, out ObjectPool pool))
-            Debug.Log($"Wrong Key in PoolManager (key : {obj.name})");
+        {
+            Debug.LogWarning($"Wrong Key in PoolManager (key : {obj.name})");
+            return;
+        }
 
         pool.ReturnPool(obj);
     }

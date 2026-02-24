@@ -13,9 +13,11 @@ public enum UIName
 public class UIManager : Singleton<UIManager>
 {
     
-    public Transform canvas; //캔버스의 위치
+    Transform canvas; //캔버스의 위치
+    Transform globalCanvas; // 전역 캔버스(비동기 로딩)
 
-    public Dictionary<string, UIBase> UIDic = new();
+    Dictionary<string, UIBase> UIDic = new(); // 일반 ui모음
+    private UIBase fadeUI; // 비동기 로딩용 ui
 
     public void ShowPanel(string uiName) 
     {
@@ -113,10 +115,40 @@ public class UIManager : Singleton<UIManager>
            return TryGetPanel(key, out panel);
         }
 
+        Debug.LogWarning($"UIName is not in data : {uiName}");
         panel = null;
         return false;
     }
-    
+
+    /// <summary>
+    /// 게임 시작 첫 로딩용
+    /// </summary>
+    public void InitGlobalCanvas()
+    {
+        if (globalCanvas != null) return;
+
+        // GlobalCanvas Prefab 로드 
+        if (AssetManager.Instance.TryGetAsset<GameObject>(AddressKeys.GlobalCanvas, out GameObject obj))
+        {
+            globalCanvas = Instantiate(obj).transform;
+            DontDestroyOnLoad(globalCanvas.gameObject); 
+
+            // Fade용 패널 생성
+            if (AssetManager.Instance.TryGetAsset<GameObject>(AddressKeys.FadeUI, out GameObject fadeObj))
+            {
+                fadeUI = Instantiate(fadeObj, globalCanvas).GetComponent<UIBase>();
+                fadeUI.gameObject.SetActive(true); 
+            }
+        }
+    }
+
+    public async UniTask DoFade(float targetAlpha, float duration)
+    {
+        if (fadeUI is FadePanelUI fader) 
+        {
+            await fader.FadeAsync(targetAlpha, duration);
+        }
+    }
     /// <summary>
     /// Scene에 진입 시 UI 캐싱 처리
     /// </summary>

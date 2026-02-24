@@ -15,11 +15,52 @@ public interface IInItable
 
 public class LoadManager : Singleton<LoadManager>
 {
-    bool isFirstLoading = true;
+    bool isInitialized = false;
+    bool isSceneLoading = false;
 
     protected override void Init()
     {
-        SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.sceneLoaded -= OnFirstLoaded;
+        SceneManager.sceneLoaded += OnFirstLoaded;
+    }
+
+    /// <summary>
+    /// 비동기 Scene 로딩
+    /// </summary>
+    /// <param name="name"></param>
+    public async void LoadSceneAsync(string name)
+    {
+        if (isSceneLoading) return;
+        isSceneLoading = true;
+
+        try
+        {
+            // 0. 입력 차단
+            InputManager.Instance.InputDisalbeAll();
+
+            // 1. Fade In (검은 화면으로)
+            await UIManager.Instance.DoFade(1.0f, 0.5f); // (목표 알파값, 지속시간)
+
+            // 2. 기존 씬 정리 (Unloading)
+            UnLoading(SceneManager.GetActiveScene().name);
+
+            // 3. 비동기 씬 전환
+            await SceneManager.LoadSceneAsync(name).ToUniTask();
+
+            // 4. 새로운 씬 로딩 로직 실행
+            await Loading(name);
+
+            // 5. Fade Out (다시 화면 보이게)
+            await UIManager.Instance.DoFade(0.0f, 0.5f);
+
+            // 6. 입력 복구
+            InputManager.Instance.InputEnableAll();
+        }
+        finally
+        {
+            isSceneLoading = false; 
+        }
+        
     }
 
     public void LoadScene(string name)
@@ -28,13 +69,26 @@ public class LoadManager : Singleton<LoadManager>
         SceneManager.LoadScene(name);
     }
 
-    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    private void OnFirstLoaded(Scene scene, LoadSceneMode mode)
     {
-        Loading(scene.name).Forget();
+        if (isInitialized) return;
+        isInitialized = true;
+
+        SceneManager.sceneLoaded -= OnFirstLoaded;
+        FirstLoading(scene).Forget();
+        
     }
 
-    private async UniTask FirstLoading()
+    /// <summary>
+    /// 첫 로딩
+    /// </summary>
+    /// <param name="scene"></param>
+    /// <returns></returns>
+    private async UniTask FirstLoading(Scene scene)
     {
+        // 입력을 막는다.
+        InputManager.Instance.InputDisalbeAll();
+
         // 기본 Data Loading
         await DataManager.Instance.LoadItemDataAsync(this.destroyCancellationToken);
         await DataManager.Instance.LoadMonsterDataAsync(this.destroyCancellationToken);
@@ -43,6 +97,17 @@ public class LoadManager : Singleton<LoadManager>
 
         await AssetManager.Instance.LoadAssetsByLabelAsync("UI", this.destroyCancellationToken);
         await AssetManager.Instance.LoadAssetsByLabelAsync("Monster", this.destroyCancellationToken);
+
+        UIManager.Instance.InitGlobalCanvas();
+
+        // 입력을 푼다.
+        InputManager.Instance.InputEnableAll();
+
+        // Scene 로딩
+        await Loading(scene.name);
+
+        // 화면 활성화
+        await UIManager.Instance.DoFade(0.0f, 0.5f);
     }
 
     private void FirstUnLoading()
@@ -60,27 +125,20 @@ public class LoadManager : Singleton<LoadManager>
         // 0. 입력을 막는다.
         InputManager.Instance.InputDisalbeAll();
 
-        // 1. 끝까지 쓸 것들 한번만 로딩
-        if (isFirstLoading)
-        {
-            await FirstLoading();
-            isFirstLoading = false;
-        }
-
-        // 2. Scene에 필요한 로딩을 모두 한다.
+        // 1. Scene에 필요한 로딩을 모두 한다.
         List<string> uIList = await AssetManager.Instance.LoadAssetsByLabelAsync($"{name}UI", this.destroyCancellationToken);
         List<string> gameList = await AssetManager.Instance.LoadAssetsByLabelAsync($"{name}Game", this.destroyCancellationToken);
 
-        // 3. 처음부터 존재하는 객체는 만든다.
+        // 2. 처음부터 존재하는 객체는 만든다.
         GameManager.Instance.OnSceneLoadedCreate(gameList);
         UIManager.Instance.OnSceneLoadedCreate(uIList);
         PoolManager.Instance.OnSceneLoadCreate();
 
-        // 4. 초기화한다.(외부참조, 이벤트구독)
+        // 3. 초기화한다.(외부참조, 이벤트구독)
         UIManager.Instance.OnSceneLoadedInit();
         GameManager.Instance.OnSceneLoadedInit();
 
-        // 5. 게임을 시작한다.
+        // 4. 게임을 시작한다.
         InputManager.Instance.InputEnableAll();
     }
 

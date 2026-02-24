@@ -14,8 +14,12 @@ public class GameManager : Singleton<GameManager>
         if(AssetManager.Instance.TryGetAsset<GameObject>(AddressKeys.Player, out GameObject obj))
         {
             player = Instantiate(obj).GetComponent<Player>();
-            cam = GameObject.Find("Main Camera").GetComponent<CameraController>();
-            cam.SetTarget(player.transform);
+
+            cam = Object.FindObjectOfType<CameraController>();
+            if (cam == null)
+                Debug.LogError("[GameManager] CameraController를 씬에서 찾을 수 없습니다.");
+            else
+                cam.SetTarget(player.transform);
         }
 
     }
@@ -41,24 +45,26 @@ public class GameManager : Singleton<GameManager>
         player?.Initialize();
     }
 
+#if UNITY_EDITOR
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            PoolManager.Instance.Instanciate(MonsterId.Goblin,
+            PoolManager.Instance.Instanciate(MonsterId.Dragon,
             new MonsterArg { position = new Vector2(0f, 0f) });
         }
         if(Input.GetKeyDown(KeyCode.Alpha1))
         {
-            LoadManager.Instance.LoadScene("GameScene");
+            LoadManager.Instance.LoadSceneAsync("GameScene");
         }
         if(Input.GetKeyDown(KeyCode.Alpha2))
         {
-            LoadManager.Instance.LoadScene("DungeonScene");
+            LoadManager.Instance.LoadSceneAsync("DungeonScene");
         }
         if (Input.GetKeyDown(KeyCode.Alpha3))
         {
-            LoadManager.Instance.LoadScene("StartScene");
+            LoadManager.Instance.LoadSceneAsync("StartScene");
         }
     }
+#endif
 }

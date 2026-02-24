@@ -9,6 +9,7 @@ public enum BulletId
 {
     None,
     Arrow,
+    FireBall,
 }
 
 public struct BulletArg : InitData
@@ -24,20 +25,20 @@ public struct BulletArg : InitData
 [RequireComponent(typeof(Rigidbody2D))]
 public class Bullet : MonoBehaviour, IPoolable, IInItable
 {
-    Rigidbody2D rigid;
-    CancellationTokenSource cts;
+    protected Rigidbody2D rigid;
+    protected CancellationTokenSource cts;
 
-    BulletId id;
-    Vector2 dir;
+    protected BulletId id;
+    protected Vector2 dir;
 
-    int wallLayer;
-    int playerLayer;
+    protected int wallLayer;
+    protected int playerLayer;
 
-    int atk;
-    float speed;
-    bool isDeactivate;
+    protected int atk;
+    protected float speed;
+    protected bool isDeactivate;
 
-    readonly float maxDuration = 15f; // 넘으면 destroy 
+    protected readonly float maxDuration = 15f; // 넘으면 destroy 
 
     private void Awake()
     {
@@ -65,7 +66,7 @@ public class Bullet : MonoBehaviour, IPoolable, IInItable
         Fire();
     }
 
-    public void Fire()
+    public virtual void Fire()
     {
         // 투사체 회전
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
@@ -78,7 +79,7 @@ public class Bullet : MonoBehaviour, IPoolable, IInItable
         DestroyTimer(maxDuration, cts.Token);
     }
 
-    private async void DestroyTimer(float time, CancellationToken ct)
+    protected async void DestroyTimer(float time, CancellationToken ct)
     {
         bool cancel = await UniTask.Delay(TimeSpan.FromSeconds(time), cancellationToken: ct)
             .SuppressCancellationThrow();

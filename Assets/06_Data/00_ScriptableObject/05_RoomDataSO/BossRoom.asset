@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: BossRoom
   m_EditorClassIdentifier: 
   id: 4
-  isEncount: 0
-  spawnData: []
+  isEncount: 1
+  spawnData:
+  - id: 3
+    localPosition: {x: 0, y: 0}
   boxData: []

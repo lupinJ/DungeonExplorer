@@ -5,14 +5,21 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-public class Wolf : Monster
+public class Dragon : Monster
 {
     [SerializeField] private Transform indicator;
+
+    [Header("Dragon Extra Skill")]
+    [SerializeField] private SkillDataSO jumpSkillData;
+    [SerializeField] private SkillDataSO RoundSkillData;
+
+    Skill jumpSkill;
+    Skill roundSkill;
 
     protected override void Awake()
     {
         base.Awake();
-        skill = new MeleeAttack(skillData, new SkillContext { owner = this, indicator = new List<Transform> { indicator } });
+        skill = new RangedAttack(skillData, new SkillContext { owner = this, indicator = new List<Transform> { indicator } });
         BuildBT();
     }
 
@@ -28,12 +35,12 @@ public class Wolf : Monster
 
     protected override async UniTaskVoid Birth(CancellationToken ct)
     {
-        anim.SetBool("IsBirth", true);
+        anim.SetBool("IsDown", true);
         stat.InvincibleAsync(data.birthTime, ct).Forget();
 
         await UniTask.Delay(TimeSpan.FromSeconds(data.birthTime), cancellationToken: ct);
 
-        anim.SetBool("IsBirth", false);
+        anim.SetBool("IsDown", false);
 
         FixedMoveAsync(ct).Forget();
         RunBTRoutine(ct).Forget();
@@ -84,7 +91,12 @@ public class Wolf : Monster
     private async UniTask<INode.State> DoAttackAction(CancellationToken ct)
     {
         movement.Dir = Vector2.zero; // 공격 시 정지
-        anim.SetBool("IsMove", false);
+        Vector2 dir = (target.position - transform.position).normalized;
+
+        if (dir.x < 0)
+            sprite.flipX = true;
+        else
+            sprite.flipX = false;
 
         await skill.Activate(target, stat.Atk, ct);
         return INode.State.Success;
@@ -109,7 +121,6 @@ public class Wolf : Monster
             sprite.flipX = false;
 
         movement.Dir = dir; // 이동
-        anim.SetBool("IsMove", true);
         return INode.State.Running; // 계속 추적 중임을 알림
     }
 
@@ -117,16 +128,10 @@ public class Wolf : Monster
     private async UniTask<INode.State> DoIdleAction(CancellationToken ct)
     {
         movement.Dir = Vector2.zero;
-        anim.SetBool("IsMove", false);
         return INode.State.Success;
     }
 #pragma warning restore CS1998
     #endregion
-
-    /// <summary>
-    /// 고블린 사망
-    /// </summary>
-    /// <param name="die"></param>
     public override void Die(bool die)
     {
         if (isDead) return;
@@ -139,16 +144,18 @@ public class Wolf : Monster
 
         // 물리 처리
         rigid.velocity = Vector2.zero;
-        rigid.isKinematic = true;
 
         // 인디케이터 처리
         indicator.gameObject.SetActive(false);
 
         // 애니메이션 처리
+        anim.SetBool("IsUp", false);
+        anim.SetBool("IsDown", false);
         anim.SetBool("IsAttack", false);
         anim.SetBool("IsDead", true);
 
         // 아이템 드랍, n초후 destroy() 필요
         DieAsync(2.0f, cts.Token).Forget();
     }
+
 }

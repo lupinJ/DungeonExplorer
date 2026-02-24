@@ -9,7 +9,7 @@ public struct SkillContext
     public Unit owner;
     public Movement movement;
     public Stat stat;
-    public Transform indicator;
+    public List<Transform> indicator;
 }
 
 public abstract class Skill 
@@ -21,8 +21,8 @@ public abstract class Skill
     protected Movement movement; // 주체 움직임
     protected Stat stat; // 주체 스텟
 
-    protected Transform indicator; // 공격 표시
-    protected SpriteRenderer indicatorRenderer; // 색 or 투명도 조절
+    protected List<Transform> indicator; // 공격 표시
+    protected List<SpriteRenderer> indicatorRenderer; // 색 or 투명도 조절
 
     protected float curCooltime; // 현재 쿨타임
     protected bool isRunning; // 스킬 진행중 flag
@@ -39,7 +39,13 @@ public abstract class Skill
         movement = ctx.movement;
         stat = ctx.stat;
         indicator = ctx.indicator;
-        indicatorRenderer = indicator?.GetComponent<SpriteRenderer>();
+        if(indicator != null)
+        {
+            indicatorRenderer = new List<SpriteRenderer>();
+            for (int i = 0; i < indicator.Count; i++)
+                indicatorRenderer.Add(indicator[i].GetComponent<SpriteRenderer>());
+        }
+        
         curCooltime = 0;
     }
 

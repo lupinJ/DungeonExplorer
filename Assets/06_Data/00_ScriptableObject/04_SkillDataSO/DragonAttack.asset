@@ -9,15 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec13d9936693f3c4fabba41905ec0b5e, type: 3}
-  m_Name: WolfAttack
+  m_Script: {fileID: 11500000, guid: cd28868d0c6f4c242a3afbcaa7dc1a42, type: 3}
+  m_Name: DragonAttack
   m_EditorClassIdentifier: 
-  skillName: "\uB291\uB300 \uBB3C\uAE30 \uACF5\uACA9"
-  coolTime: 0.8
+  skillName: "\uB4DC\uB798\uACE4 \uC77C\uBC18 \uACF5\uACA9"
+  coolTime: 2
   mpCost: 0
-  attackRange: 1.3
-  startDelay: 0.5
-  animTime: 0.4
-  attackTime: 0.4
+  attackRange: 8
+  startDelay: 0.4
+  animTime: 0.8
+  attackTime: 0.5
   endDelay: 0.1
-  BoxRange: {x: 1.8, y: 1}
+  id: 2
+  speed: 5

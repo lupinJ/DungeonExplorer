@@ -16,7 +16,7 @@ public class Player : Unit, IInItable, IHitable
     Movement movement; // 움직임 계산
     Skill dash; // dash 스킬
 
-    CancellationTokenSource enableToken; // 토큰
+    CancellationTokenSource cts; // 토큰
     Camera mainCamera; // 카메라 캐싱
 
     [SerializeField] SkillDataSO dashDataSO; // 대쉬 스킬 정보
@@ -26,6 +26,7 @@ public class Player : Unit, IInItable, IHitable
 
     float interactRange; // 상호작용 범위
     bool isFlip = false; // 바라보는 방향
+    bool isDead = false;
     Vector3 attackDir;
 
     protected override void Awake()
@@ -46,6 +47,7 @@ public class Player : Unit, IInItable, IHitable
         movement.Speed = 5f;
         interactRange = 1.0f;
         isFlip = false;
+        isDead = false;
         stat.Atk = 10;
     }
     public void Initialize(InitData data = default)
@@ -55,23 +57,26 @@ public class Player : Unit, IInItable, IHitable
         EventManager.Instance.Subscribe <InputManager.InteractEvent, InputState>(Interact);
         EventManager.Instance.Subscribe<InputManager.AttackEvent, InputState>(Attack);
 
+        stat.onDie -= PlayerDie;
         stat.onDie += PlayerDie;
+        isDead = false;
     }
 
     private void OnEnable()
     {
-        enableToken?.Cancel();
-        enableToken?.Dispose();
-        enableToken = new CancellationTokenSource();
-        FixedMoveAsync(enableToken.Token).Forget();
-        LookAtAsync(enableToken.Token).Forget();
+        cts?.Cancel();
+        cts?.Dispose();
+        cts = new CancellationTokenSource();
+        FixedMoveAsync(cts.Token).Forget();
+        LookAtAsync(cts.Token).Forget();
     }
 
     private void OnDisable()
     {
-        enableToken?.Cancel();
-        enableToken?.Dispose();
-        enableToken = null;
+        cts?.Cancel();
+        cts?.Dispose();
+        cts = null;
+        stat.onDie -= PlayerDie;
     }
 
     private void OnDestroy()
@@ -181,8 +186,7 @@ public class Player : Unit, IInItable, IHitable
         if (state != InputState.Started)
             return;
 
-        dash.Activate(null, 0, enableToken.Token);
-        //DashAsync(enableToken.Token).Forget();
+        dash.Activate(null, 0, cts.Token);
     }
 
     
@@ -311,7 +315,7 @@ public class Player : Unit, IInItable, IHitable
             return;
 
         stat.Hp -= atk;
-        stat.InvincibleAsync(0.2f, enableToken.Token).Forget(); // 피격 무적
+        stat.InvincibleAsync(0.2f, cts.Token).Forget(); // 피격 무적
     }
 
     /// <summary>
@@ -368,8 +372,23 @@ public class Player : Unit, IInItable, IHitable
 
     public void PlayerDie(bool isDie)
     {
-        // 사망 애니메이션
-        // 움직임 봉쇄
+        if (isDead) return;
+        isDead = true;
+
+        // 정지처리
+        cts?.Cancel();
+        cts?.Dispose();
+        cts = new CancellationTokenSource();
+
+        // 물리 처리
+        rigid.velocity = Vector2.zero;
+        movement.Dir = Vector2.zero;
+
+        // 애니메이션 처리
+        anim.SetBool("IsMove", false);
+        anim.SetBool("IsDash", false);
+        anim.SetBool("IsDead", true);
+
         // GameOver처리(GameManager) - Event 연결 or 직접 호출
     }
 }

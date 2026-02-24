@@ -14,6 +14,7 @@ public class SkillDataSO : ScriptableObject
 
     public float startDelay; // 선딜
     public float animTime; // 공격 모션 시간
+    public float attackTime; // 공격 타이밍
     public float endDelay; // 후딜    
 }
 

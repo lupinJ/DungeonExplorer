@@ -37,6 +37,9 @@ public class RoomController : MonoBehaviour, IInItable, IPoolable
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (collision.gameObject.layer != LayerMask.NameToLayer("Player"))
+            return;
+       
         SetBlock(true);
         MonsterEncounter();
         colider.enabled = false;

@@ -23,7 +23,8 @@ public class RangedAttack : Skill
     public override async UniTask Activate(Transform target, int value, CancellationToken ct)
     {
         if (isRunning) return;
-        if (target == null) return;    
+        if (target == null) return;
+        if (indicator.Count < 1) return;
 
         try
         {
@@ -33,35 +34,36 @@ public class RangedAttack : Skill
             currentBoxCenter = (Vector2)owner.transform.position + (dir * boxOffset);
 
             // 인디케이터 연출
-            indicator.gameObject.SetActive(true);
-            indicator.position = (Vector2)owner.transform.position + (dir * (boxOffset - rData.attackRange / 2));
-            indicator.rotation = Quaternion.Euler(0, 0, currentAngle);
-            indicator.localScale = new Vector3(rData.attackRange, 0.2f, 1);
-            indicatorRenderer.color = new Color(1, 0, 0, 0.2f); // 연한 빨강
+            indicator[0].gameObject.SetActive(true);
+            indicator[0].position = (Vector2)owner.transform.position + (dir * (boxOffset - rData.attackRange / 2));
+            indicator[0].rotation = Quaternion.Euler(0, 0, currentAngle);
+            indicator[0].localScale = new Vector3(rData.attackRange, 0.2f, 1);
+            indicatorRenderer[0].color = new Color(1, 0, 0, 0.2f); // 연한 빨강
 
+            // 선 딜레이
             await UniTask.Delay(TimeSpan.FromSeconds(rData.startDelay), cancellationToken: ct);
 
-            anim.SetBool("IsAttack", true); // 애니메이션 실행
-            indicator.gameObject.SetActive(false); // 인디케이터 비활성화
+            // 애니메이션 실행
+            ShowAnim(rData.animTime, ct).Forget(); 
+            indicator[0].gameObject.SetActive(false); // 인디케이터 비활성화
 
-            await UniTask.Delay(TimeSpan.FromSeconds(rData.animTime), cancellationToken: ct);
+            await UniTask.Delay(TimeSpan.FromSeconds(rData.attackTime), cancellationToken: ct);
 
             // 실제 공격 판정
-            GameObject obj = PoolManager.Instance.Instanciate(BulletId.Arrow,
+            GameObject obj = PoolManager.Instance.Instanciate(rData.id,
             new BulletArg { id = rData.id, atk = value, dir = dir, speed = rData.speed, pos = owner.transform.position });
             
-
-            anim.SetBool("IsAttack", false); // 애니메이션 종료
-
+            // 후 딜레이
             await UniTask.Delay(TimeSpan.FromSeconds(rData.endDelay), cancellationToken: ct);
 
-            SetCooltime(rData.coolTime, ct).Forget(); // 쿨타임 시작
+            // 쿨타임 시작
+            SetCooltime(rData.coolTime, ct).Forget(); 
         }
         catch (System.OperationCanceledException)
         {
-            if (indicator != null)
+            if (indicator != null && indicator[0] != null)
             {
-                indicator.gameObject.SetActive(false);
+                indicator[0].gameObject.SetActive(false);
             }
 
             if (anim != null)
@@ -69,5 +71,14 @@ public class RangedAttack : Skill
                 anim?.SetBool("IsAttack", false);
             }
         }
+    }
+
+    private async UniTaskVoid ShowAnim(float animTime, CancellationToken ct)
+    {
+        anim.SetBool("IsAttack", true); // 애니메이션 실행
+
+        await UniTask.Delay(TimeSpan.FromSeconds(animTime), cancellationToken: ct).SuppressCancellationThrow();
+
+        anim.SetBool("IsAttack", false); // 애니메이션 종료
     }
 }

@@ -18,6 +18,7 @@ MonoBehaviour:
   attackRange: 7
   startDelay: 0.7
   animTime: 0.2
+  attackTime: 0.2
   endDelay: 0.1
   id: 1
   speed: 5
