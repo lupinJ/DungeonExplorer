@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PoolManager : Singleton<PoolManager>
@@ -43,6 +44,20 @@ public class PoolManager : Singleton<PoolManager>
         return pool.UsePool();
     }
 
+    public GameObject Instanciate(string key, InitData data)
+    {
+        GameObject obj = Instanciate(key);
+
+        if (obj == null)
+            return null;
+
+        if (!obj.TryGetComponent<IInItable>(out IInItable init))
+            return null;
+
+        init.Initialize(data);
+        return obj;
+    }
+
     public GameObject Instanciate(MonsterId id)
     {
         if (!DataManager.Instance.TryGetMonsterPath(id, out var path))
@@ -52,6 +67,28 @@ public class PoolManager : Singleton<PoolManager>
     }
 
     public GameObject Instanciate(MonsterId id, InitData data)
+    {
+        GameObject obj = Instanciate(id);
+
+        if (obj == null)
+            return null;
+
+        if (!obj.TryGetComponent<IInItable>(out IInItable init))
+            return null;
+
+        init?.Initialize(data);
+        return obj;
+    }
+
+    public GameObject Instanciate(BulletId id)
+    {
+        if (!DataManager.Instance.TryGetBulletPath(id, out var path))
+            return null;
+
+        return Instanciate(path);
+    }
+
+    public GameObject Instanciate(BulletId id, InitData data)
     {
         GameObject obj = Instanciate(id);
 

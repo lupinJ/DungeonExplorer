@@ -12,6 +12,7 @@ public enum ItemId
     Katana
 }
 
+[System.Serializable]
 public struct ItemDropInfo
 {
     public ItemId id;

@@ -189,7 +189,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: eb0ca202ef8815543b45d73dcc56c058, type: 2}
-  skillData: {fileID: 11400000, guid: 7e82e6fb413126540a9b55e5b8548872, type: 2}
+  skillData: {fileID: 11400000, guid: 5bf234e1acb0a9749aac01545aef2ce0, type: 2}
   hpBar: {fileID: 6848362110963308388}
   indicator: {fileID: 2700851312103252689}
 --- !u!70 &955355291308442395

@@ -73,8 +73,10 @@ public class InputManager : Singleton<InputManager>,
     /// <summary>
     /// ΩÃ±€≈Ê º“∏Í Ω√
     /// </summary>
-    private void OnApplicationQuit()
+    protected override void OnApplicationQuit()
     {
+        base.OnApplicationQuit();
+
         if (EventManager.Instance != null)
         {
             EventManager.Instance.RemoveEvent<MoveEvent>();

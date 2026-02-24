@@ -11,13 +11,10 @@ public class Goblin : Monster
 {
     [SerializeField] private Transform indicator;  
     
-    SelectorNode rootNode; // behavior tree
-    Skill skill; // monster Attack
-
     protected override void Awake()
     {
         base.Awake();
-        skill = new MeleeAttack(skillData, new SkillContext { owner = this, indicator = indicator });
+        skill = new RangedAttack(skillData, new SkillContext { owner = this, indicator = indicator });
         BuildBT();
     }
 
@@ -28,17 +25,10 @@ public class Goblin : Monster
     public override void Initialize(InitData data = null)
     {
         base.Initialize(data);
-  
-        skill.Reset();
-
-        cts?.Cancel();
-        cts?.Dispose();
-        cts = new CancellationTokenSource();
-
         Birth(cts.Token).Forget();
     }
 
-    private async UniTaskVoid Birth(CancellationToken ct)
+    protected override async UniTaskVoid Birth(CancellationToken ct)
     {
         anim.SetBool("IsBirth", true);
         stat.InvincibleAsync(data.birthTime, ct).Forget();
@@ -54,7 +44,7 @@ public class Goblin : Monster
     /// <summary>
     /// BT 생성
     /// </summary>
-    private void BuildBT()
+    protected override void BuildBT()
     {
         // 공격 시퀀스: 사거리 체크 -> 쿨차임 체크 -> 공격 실행
         var attackSequence = new SequenceNode();
@@ -74,20 +64,6 @@ public class Goblin : Monster
         selector.Add(new ActionNode(DoIdleAction));
 
         rootNode = selector;
-    }
-
-    /// <summary>
-    /// BT 루프
-    /// </summary>
-    /// <param name="ct"></param>
-    /// <returns></returns>
-    private async UniTaskVoid RunBTRoutine(CancellationToken ct)
-    {
-        while (!ct.IsCancellationRequested)
-        {
-            await rootNode.Evaluate(ct);
-            await UniTask.NextFrame(PlayerLoopTiming.Update, ct);
-        }
     }
 
     #region BT Action Methods
@@ -150,25 +126,6 @@ public class Goblin : Monster
     #endregion
 
     /// <summary>
-    /// 물리 이동 처리
-    /// </summary>
-    /// <param name="ct"></param>
-    /// <returns></returns>
-    async UniTaskVoid FixedMoveAsync(CancellationToken ct)
-    {
-        while (!ct.IsCancellationRequested)
-        {
-            await UniTask.Yield(PlayerLoopTiming.FixedUpdate, ct);
-            rigid.velocity = movement.Velocity;
-        }
-    }
-
-    private void OnDestroy()
-    {
-        skill = null;
-    }
-
-    /// <summary>
     /// 고블린 사망
     /// </summary>
     /// <param name="die"></param>
@@ -197,11 +154,7 @@ public class Goblin : Monster
         DieAsync(2.0f).Forget();
     }
 
-    public async UniTaskVoid DieAsync(float time)
-    {
-        await UniTask.WaitForSeconds(time);
-        PoolManager.Instance.Destroy(this.gameObject);
-    }
+  
 
 #if UNITY_EDITOR
     // 에디터 창에서 공격 범위를 그리는 코드

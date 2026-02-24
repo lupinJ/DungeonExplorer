@@ -27,6 +27,7 @@ MonoBehaviour:
     m_Address: Assets/02_Prefab/Item/DropItem.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
+    - DungeonSceneGame
     - GameSceneGame
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2b8bcd937b20f084c8de9335adf34314
@@ -54,6 +55,19 @@ MonoBehaviour:
     m_SerializedLabels:
     - DungeonSceneUI
     - GameSceneUI
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 6042e6306bec72140ba0b74b9e057c5b
+    m_Address: Assets/06_Data/00_ScriptableObject/03_Mappping/BulletMappingTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - BulletData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 740542fb7df24e943b11a2a7b7337f91
+    m_Address: Assets/02_Prefab/07_Bullet/Arrow.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DungeonSceneGame
+    - GameSceneGame
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 811ee074e7b43d942aa4179a4106ad83
     m_Address: Assets/06_Data/00_ScriptableObject/03_Mappping/MonsterMappingTable.asset
@@ -99,6 +113,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: f7f944e629e6070429dd5e88ca2d9423
     m_Address: Assets/02_Prefab/03_Monster/Goblin.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: fcd6561b8a9db9d4488930a502a2b901
+    m_Address: Assets/02_Prefab/03_Monster/Wolf.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - Monster

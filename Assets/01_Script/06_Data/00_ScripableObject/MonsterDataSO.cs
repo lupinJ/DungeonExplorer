@@ -6,6 +6,7 @@ public enum MonsterId
 {
     None,
     Goblin,
+    Wolf,
 }
 
 [CreateAssetMenu(fileName = "MonsterDataSO", menuName = "Scriptable Object/MonsterDataSO")]

@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-struct TreasureBoxArg : InitData
+[System.Serializable]
+public struct TreasureBoxArg : InitData
 {
     public Vector2 position;
     public ItemDropInfo itemInfo;

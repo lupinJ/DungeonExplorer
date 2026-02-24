@@ -22,6 +22,7 @@ public class DataManager : Singleton<DataManager>
     Dictionary<ItemId, ItemDataSO> itemTable = new();
     Dictionary<MonsterId, string> monsterPathTable = new();
     Dictionary<UIName, string> uiPathTable = new();
+    Dictionary<BulletId, string> bulletPathTable = new();
 
     public SaveData Data {  
         get { return saveData; }
@@ -51,6 +52,19 @@ public class DataManager : Singleton<DataManager>
             return true;
         }
         
+        key = null;
+        return false;
+    }
+
+    public bool TryGetBulletPath(BulletId id, out string key)
+    {
+        if (bulletPathTable.TryGetValue(id, out string path))
+        {
+            key = path;
+            return true;
+        }
+
+        Debug.Log($"BulletId is null : {id}");
         key = null;
         return false;
     }
@@ -129,6 +143,19 @@ public class DataManager : Singleton<DataManager>
         foreach (var map in table.mappings)
         {
             monsterPathTable.Add(map.id, map.path);
+        }
+    }
+
+    public async UniTask LoadBulletDataAsync(CancellationToken ct)
+    {
+        // SO Data ·Îµå
+        await AssetManager.Instance.LoadAssetsByLabelAsync("BulletData", ct);
+
+        // BulletId Mapping
+        AssetManager.Instance.TryGetAsset(AddressKeys.BulletMappingTable, out BulletMappingTable table);
+        foreach (var map in table.mappings)
+        {
+            bulletPathTable.Add(map.id, map.path);
         }
 
     }

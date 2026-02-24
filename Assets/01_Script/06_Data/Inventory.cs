@@ -29,12 +29,8 @@ public class Inventory
     {
         // item Test Data(추후 수정)
         items.Clear();
-        items.Add(ItemFactory.CreateItem(ItemId.Katana));
-        items.Add(ItemFactory.CreateItem(ItemId.Katana));
-        items.Add(ItemFactory.CreateItem(new ItemDropInfo { id = ItemId.HealthPotion, count = 11 }));
-        items.Add(ItemFactory.CreateItem(new ItemDropInfo { id = ItemId.ManaPotion, count = 97 }));
 
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 24; i++)
             items.Add(ItemFactory.CreateItem(ItemId.None));
     }
 

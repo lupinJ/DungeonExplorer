@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -37,6 +38,7 @@ public class LoadManager : Singleton<LoadManager>
         // ±âº» Data Loading
         await DataManager.Instance.LoadItemDataAsync(this.destroyCancellationToken);
         await DataManager.Instance.LoadMonsterDataAsync(this.destroyCancellationToken);
+        await DataManager.Instance.LoadBulletDataAsync(this.destroyCancellationToken);
         await DataManager.Instance.LoadUIDataAsync(this.destroyCancellationToken);
 
         await AssetManager.Instance.LoadAssetsByLabelAsync("UI", this.destroyCancellationToken);
@@ -45,8 +47,12 @@ public class LoadManager : Singleton<LoadManager>
 
     private void FirstUnLoading()
     {
-        AssetManager.Instance.UnloadByLabel("UI");
-        AssetManager.Instance.UnloadByLabel("Monster");
+        if(AssetManager.Instance != null)
+        {
+            AssetManager.Instance.UnloadByLabel("UI");
+            AssetManager.Instance.UnloadByLabel("Monster");
+        }
+        
     }
 
     private async UniTask Loading(string name)
@@ -97,8 +103,9 @@ public class LoadManager : Singleton<LoadManager>
 
     }
 
-    private void OnApplicationQuit()
+    protected override void OnApplicationQuit()
     {
-        // FirstUnLoading();
+        base.OnApplicationQuit();
+        FirstUnLoading();
     }
 }
