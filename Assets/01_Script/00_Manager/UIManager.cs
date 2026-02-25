@@ -8,6 +8,9 @@ public enum UIName
 {
     Inventory,
     PlayerHpBar,
+    StartButton,
+    SettingButton,
+    QuitButton,
 }
 
 public class UIManager : Singleton<UIManager>

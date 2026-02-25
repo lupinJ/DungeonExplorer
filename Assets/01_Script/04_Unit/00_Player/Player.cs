@@ -390,5 +390,6 @@ public class Player : Unit, IInItable, IHitable
         anim.SetBool("IsDead", true);
 
         // GameOver贸府(GameManager) - Event 楷搬 or 流立 龋免
+        GameManager.Instance.GameOver();
     }
 }

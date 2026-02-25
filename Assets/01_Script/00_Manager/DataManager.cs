@@ -17,8 +17,8 @@ public class DataManager : Singleton<DataManager>
     string path;
     [SerializeField]
     SaveData saveData;
+    readonly int maxInventory = 24; 
 
-    int maxInventory = 24; // юс╫ц
     Dictionary<ItemId, ItemDataSO> itemTable = new();
     Dictionary<MonsterId, string> monsterPathTable = new();
     Dictionary<UIName, string> uiPathTable = new();

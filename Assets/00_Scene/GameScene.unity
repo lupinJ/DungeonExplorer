@@ -258,6 +258,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2850936804799300297, guid: 43446f0a3cb79e0428f7f79a052e0453, type: 3}
+      propertyPath: m_ClearFlags
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2850936804799300297, guid: 43446f0a3cb79e0428f7f79a052e0453, type: 3}
+      propertyPath: m_BackGroundColor.b
+      value: 0.9716981
+      objectReference: {fileID: 0}
+    - target: {fileID: 2850936804799300297, guid: 43446f0a3cb79e0428f7f79a052e0453, type: 3}
+      propertyPath: m_BackGroundColor.g
+      value: 0.86304885
+      objectReference: {fileID: 0}
+    - target: {fileID: 2850936804799300297, guid: 43446f0a3cb79e0428f7f79a052e0453, type: 3}
+      propertyPath: m_BackGroundColor.r
+      value: 0.28875935
+      objectReference: {fileID: 0}
     - target: {fileID: 5141552760103925599, guid: 43446f0a3cb79e0428f7f79a052e0453, type: 3}
       propertyPath: m_Name
       value: Main Camera
@@ -2774,7 +2790,7 @@ GameObject:
   - component: {fileID: 1631682666}
   - component: {fileID: 1631682665}
   m_Layer: 0
-  m_Name: Grid
+  m_Name: TownMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

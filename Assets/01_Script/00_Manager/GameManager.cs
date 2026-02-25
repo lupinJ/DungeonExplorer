@@ -1,13 +1,24 @@
+using Cysharp.Threading.Tasks;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
     public Player player;
     public CameraController cam;
 
+    public async void GameOver()
+    {
+        InputManager.Instance.InputDisalbeAll();
+
+        // 추가사망처리
+
+        await UniTask.Delay(System.TimeSpan.FromSeconds(2.0f));
+
+        InputManager.Instance.InputEnableAll();
+        LoadManager.Instance.LoadSceneAsync("GameScene");
+    }
     public void OnSceneLoadedCreate(List<string> list)
     {
         

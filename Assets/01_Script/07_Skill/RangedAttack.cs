@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +10,6 @@ public class RangedAttack : Skill
     RangedAttackSO rData;
 
     private float currentAngle;
-    private Vector2 currentBoxCenter;
     private float boxOffset;
 
     public RangedAttack(SkillDataSO data, SkillContext ctx) : base(data, ctx)
@@ -31,7 +29,6 @@ public class RangedAttack : Skill
             // 방향 고정
             Vector2 dir = (target.position - owner.transform.position).normalized;
             currentAngle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-            currentBoxCenter = (Vector2)owner.transform.position + (dir * boxOffset);
 
             // 인디케이터 연출
             indicator[0].gameObject.SetActive(true);
@@ -78,6 +75,7 @@ public class RangedAttack : Skill
         anim.SetBool("IsAttack", true); // 애니메이션 실행
 
         await UniTask.Delay(TimeSpan.FromSeconds(animTime), cancellationToken: ct).SuppressCancellationThrow();
+        if (anim == null) return;
 
         anim.SetBool("IsAttack", false); // 애니메이션 종료
     }
