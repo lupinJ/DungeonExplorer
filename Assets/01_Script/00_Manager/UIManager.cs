@@ -8,6 +8,7 @@ public enum UIName
 {
     Inventory,
     PlayerHpBar,
+    SettingPanel,
     StartButton,
     SettingButton,
     QuitButton,
@@ -152,6 +153,7 @@ public class UIManager : Singleton<UIManager>
             await fader.FadeAsync(targetAlpha, duration);
         }
     }
+
     /// <summary>
     /// Scene에 진입 시 UI 캐싱 처리
     /// </summary>

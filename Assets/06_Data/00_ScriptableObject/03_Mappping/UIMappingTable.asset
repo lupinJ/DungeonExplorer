@@ -17,3 +17,5 @@ MonoBehaviour:
     path: Assets/02_Prefab/01_UI/HpBarUI.prefab
   - id: 0
     path: Assets/02_Prefab/01_UI/InventoryUI.prefab
+  - id: 2
+    path: Assets/02_Prefab/01_UI/SettingPanelUI.prefab

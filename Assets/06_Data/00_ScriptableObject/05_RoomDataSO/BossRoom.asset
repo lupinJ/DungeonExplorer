@@ -18,3 +18,7 @@ MonoBehaviour:
   - id: 3
     localPosition: {x: 0, y: 0}
   boxData: []
+  portalData:
+  - position: {x: 0, y: 10}
+    isOpen: 0
+    nextScene: GameScene

@@ -20,8 +20,11 @@ public class RoomDataSO : ScriptableObject
     public bool isEncount;
 
     [Header("=== Spawn Monster Info ===")]
-    public MonsterSpawnInfo[] spawnData;
+    public List<MonsterSpawnInfo> spawnData = new();
 
     [Header("=== Treasure Box Info ===")]
-    public TreasureBoxArg[] boxData;
+    public List<TreasureBoxArg> boxData = new();
+
+    [Header("=== Portal Info ===")]
+    public List<PortalArg> portalData = new();
 }
