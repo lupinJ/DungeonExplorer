@@ -25,6 +25,10 @@ public class SettingPanelUI : PopupUI, IInItable
         sfxSlider.onValueChanged.AddListener((value) => SoundManager.Instance.SfxVolume = value);
         gameObject.SetActive(false);
     }
+    public void OnReturnToTitle()
+    {
+        LoadManager.Instance.LoadSceneAsync("StartScene");
+    }
 
     public void OnQuitButtonClick()
     {

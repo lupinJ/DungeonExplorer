@@ -9,9 +9,7 @@ public enum UIName
     Inventory,
     PlayerHpBar,
     SettingPanel,
-    StartButton,
-    SettingButton,
-    QuitButton,
+    InGameSettingPanel,
 }
 
 public class UIManager : Singleton<UIManager>

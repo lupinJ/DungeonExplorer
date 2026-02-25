@@ -156,7 +156,23 @@ public class InputManager : Singleton<InputManager>,
     }
     public void OnSettingUI(InputAction.CallbackContext context)
     {
-        //throw new System.NotImplementedException();
+        if (!context.started)
+            return;
+
+        if (UIManager.Instance.TryGetPanel(UIName.InGameSettingPanel, out UIBase uiBase))
+        {
+            PopupUI SettingPanel = uiBase as PopupUI;
+            if (SettingPanel.IsActive)
+            {
+                input.Player.Enable();
+                SettingPanel.HidePanel();
+            }
+            else
+            {
+                input.Player.Disable();
+                SettingPanel.ShowPanel();
+            }
+        }
     }
 
     InputState GetState(InputAction.CallbackContext context)
