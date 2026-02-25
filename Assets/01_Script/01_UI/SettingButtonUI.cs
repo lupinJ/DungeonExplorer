@@ -6,9 +6,11 @@ public class SettingButtonUI : UIBase
 {
     public void OnSettingButttonClick()
     {
-        if (!UIManager.Instance.TryGetPanel(UIName.SettingPanel, out var panel))
+        if (!UIManager.Instance.TryGetPanel(UIName.SettingPanel, out var ui))
+            return;
+        if (ui is not SettingPanelUI panel)
             return;
 
-        panel.gameObject.SetActive(true);
+        panel.ShowPanel();
     }
 }

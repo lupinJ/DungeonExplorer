@@ -42,6 +42,7 @@ public class Dragon : Monster
 
         anim.SetBool("IsDown", false);
 
+        SoundManager.Instance.PlayBgm(SoundId.BossBgm);
         FixedMoveAsync(ct).Forget();
         RunBTRoutine(ct).Forget();
     }
@@ -153,6 +154,9 @@ public class Dragon : Monster
         anim.SetBool("IsDown", false);
         anim.SetBool("IsAttack", false);
         anim.SetBool("IsDead", true);
+
+        // 배경음악 처리
+        SoundManager.Instance.PlayMainBgm();
 
         // 아이템 드랍, n초후 destroy() 필요
         DieAsync(2.0f, cts.Token).Forget();

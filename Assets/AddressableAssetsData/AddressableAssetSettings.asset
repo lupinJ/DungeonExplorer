@@ -15,7 +15,7 @@ MonoBehaviour:
   m_DefaultGroup: be945c3c82d6b7042a3a9ba8a2bfca39
   m_currentHash:
     serializedVersion: 2
-    Hash: 310b8ebe1ca37819d9fd401528fbd234
+    Hash: ce17e4355911f3a2ca7f359abbc6a229
   m_OptimizeCatalogSize: 0
   m_BuildRemoteCatalog: 0
   m_BundleLocalCatalog: 0
@@ -87,17 +87,21 @@ MonoBehaviour:
   m_LabelTable:
     m_LabelNames:
     - default
-    - UI
-    - UIData
-    - Monster
-    - MonsterData
-    - ItemData
     - GameSceneGame
     - GameSceneUI
+    - GameSceneSound
     - DungeonSceneGame
     - DungeonSceneUI
-    - BulletData
+    - DungeonSceneSound
     - StartSceneUI
+    - StartSceneSound
+    - ItemData
+    - UIData
+    - MonsterData
+    - BulletData
+    - SoundData
+    - Monster
+    - UI
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: 35e398c95c2d17e429ae044fb6ffc0e8, type: 2}

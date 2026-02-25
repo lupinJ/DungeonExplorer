@@ -5,6 +5,8 @@ public static class AddressKeys
 
     public static readonly string Sword = "Assets/06_Data/ScriptableObject/ItemDataSO/Sword.asset";
 
+    public static readonly string _22___The_Final_of_The_Fantasy = "Assets/05_Sound/22 - The Final of The Fantasy.wav";
+
     public static readonly string DropItem = "Assets/02_Prefab/Item/DropItem.prefab";
 
     public static readonly string Player = "Assets/02_Prefab/00_Player/Player.prefab";
@@ -27,13 +29,23 @@ public static class AddressKeys
 
     public static readonly string Arrow = "Assets/02_Prefab/07_Bullet/Arrow.prefab";
 
+    public static readonly string SoundMappingTable = "Assets/06_Data/00_ScriptableObject/03_Mappping/SoundMappingTable.asset";
+
     public static readonly string MonsterMappingTable = "Assets/06_Data/00_ScriptableObject/03_Mappping/MonsterMappingTable.asset";
 
     public static readonly string QuitButton = "Assets/02_Prefab/01_UI/QuitButton.prefab";
 
     public static readonly string TreasureBox = "Assets/02_Prefab/04_Npc/TreasureBox.prefab";
 
+    public static readonly string _07___Port_Town = "Assets/05_Sound/07 - Port Town.wav";
+
     public static readonly string HealthPotion = "Assets/06_Data/00_ScriptableObject/00_ItemDataSO/01_Potion/HealthPotion.asset";
+
+    public static readonly string Door = "Assets/02_Prefab/05_Object/Door.prefab";
+
+    public static readonly string _14___Tales_of_Firelight_Town = "Assets/05_Sound/14 - Tales of Firelight Town.wav";
+
+    public static readonly string _05___Battle_1 = "Assets/05_Sound/05 - Battle 1.wav";
 
     public static readonly string SettingButton = "Assets/02_Prefab/01_UI/SettingButton.prefab";
 
@@ -53,6 +65,6 @@ public static class AddressKeys
 
     public static readonly string ManaPotion = "Assets/06_Data/00_ScriptableObject/00_ItemDataSO/01_Potion/ManaPotion.asset";
 
-    public static readonly string Door = "Assets/02_Prefab/05_Object/Door.prefab";
+    public static readonly string SoundObject = "Assets/02_Prefab/08_Sound/SoundObject.prefab";
 
 }

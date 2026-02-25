@@ -154,6 +154,10 @@ public class InputManager : Singleton<InputManager>,
             }
         }
     }
+    public void OnSettingUI(InputAction.CallbackContext context)
+    {
+        //throw new System.NotImplementedException();
+    }
 
     InputState GetState(InputAction.CallbackContext context)
     {
@@ -163,4 +167,6 @@ public class InputManager : Singleton<InputManager>,
         else if (context.canceled) state = InputState.Canceled;
         return state;
     }
+
+    
 }

@@ -23,12 +23,24 @@ MonoBehaviour:
     m_SerializedLabels:
     - ItemData
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1061368f8a0f9464da55b7f867e19f0c
+    m_Address: Assets/05_Sound/22 - The Final of The Fantasy.wav
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - StartSceneSound
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 14edf4fe490cf3140a0192b58300fc66
     m_Address: Assets/02_Prefab/Item/DropItem.prefab
     m_ReadOnly: 0
     m_SerializedLabels:
     - DungeonSceneGame
     - GameSceneGame
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1a008d618488e9d4a9fb1edee79a8062
+    m_Address: Assets/05_Sound/13 - Decisive Battle 1 - Don't Be Afraid.wav
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DungeonSceneSound
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 2b8bcd937b20f084c8de9335adf34314
     m_Address: Assets/02_Prefab/00_Player/Player.prefab
@@ -94,6 +106,12 @@ MonoBehaviour:
     - DungeonSceneGame
     - GameSceneGame
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 770e842625ea564419b62b58cd9edc5e
+    m_Address: Assets/06_Data/00_ScriptableObject/03_Mappping/SoundMappingTable.asset
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundData
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 811ee074e7b43d942aa4179a4106ad83
     m_Address: Assets/06_Data/00_ScriptableObject/03_Mappping/MonsterMappingTable.asset
     m_ReadOnly: 0
@@ -112,6 +130,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Monster
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b40362af17d0f8d48b6e03e08586708f
+    m_Address: Assets/05_Sound/07 - Port Town.wav
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - GameSceneSound
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: bb4a238aa29a567408c0a2883ceecc20
     m_Address: Assets/06_Data/00_ScriptableObject/00_ItemDataSO/01_Potion/HealthPotion.asset
     m_ReadOnly: 0
@@ -123,6 +147,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - Monster
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c63032da6e685924f989a56663d899da
+    m_Address: Assets/05_Sound/05 - Battle 1.wav
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - DungeonSceneSound
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c9292aea22d82684b9d7debdd0cb2b2c
     m_Address: Assets/02_Prefab/01_UI/SettingButton.prefab
@@ -148,6 +178,12 @@ MonoBehaviour:
     m_ReadOnly: 0
     m_SerializedLabels:
     - ItemData
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: cfb85c32df0e4674d82355314ef935a0
+    m_Address: Assets/02_Prefab/08_Sound/SoundObject.prefab
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - SoundData
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: e2f38375ff0ae1c42a786a420bf3ccfc
     m_Address: Assets/02_Prefab/01_UI/GlobalCanvas.prefab

@@ -8,8 +8,13 @@ using UnityEngine;
 [System.Serializable]
 public class SaveData
 {
+    // 인벤토리
     public List<ItemId> items;
     public int coin;
+
+    // 볼륨
+    public float bgmVolume;
+    public float sfxVolume;
 
 }
 public class DataManager : Singleton<DataManager>
@@ -23,11 +28,13 @@ public class DataManager : Singleton<DataManager>
     Dictionary<MonsterId, string> monsterPathTable = new();
     Dictionary<UIName, string> uiPathTable = new();
     Dictionary<BulletId, string> bulletPathTable = new();
+    Dictionary<SoundId, string> soundPathTable = new();
 
     public SaveData Data {  
         get { return saveData; }
-        private set { saveData = value; }
+        set { saveData = value; }
     }
+
     protected override void Init()
     {
         path = Path.Combine(Application.persistentDataPath, "database.json");
@@ -81,6 +88,18 @@ public class DataManager : Singleton<DataManager>
         return false;
     }
 
+    public bool TryGetSoundPath(SoundId id, out string key)
+    {
+        if (soundPathTable.TryGetValue(id, out string path))
+        {
+            key = path;
+            return true;
+        }
+
+        key = null;
+        return false;
+    }
+
     public void JsonLoad()
     {
         SaveData saveData = new SaveData();
@@ -94,6 +113,9 @@ public class DataManager : Singleton<DataManager>
                 this.saveData.items.Add(ItemId.None);
 
             this.saveData.coin = 0;
+            this.saveData.bgmVolume = 0.5f;
+            this.saveData.sfxVolume = 0.5f;
+
             SaveData();
         }
         else
@@ -169,5 +191,24 @@ public class DataManager : Singleton<DataManager>
         {
             uiPathTable.Add(map.id, map.path);
         }
+    }
+
+    public async UniTask LoadSoundDataAsync(CancellationToken ct)
+    {
+        // SO Data 로드
+        await AssetManager.Instance.LoadAssetsByLabelAsync("SoundData", ct);
+
+        // MonsterId Mapping
+        AssetManager.Instance.TryGetAsset(AddressKeys.SoundMappingTable, out SoundMappingTable table);
+        foreach (var map in table.mappings)
+        {
+            soundPathTable.Add(map.id, map.path);
+        }
+    }
+
+    protected override void OnApplicationQuit()
+    {
+        base.OnApplicationQuit();
+        SaveData();
     }
 }

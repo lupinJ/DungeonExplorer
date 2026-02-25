@@ -90,15 +90,19 @@ public class LoadManager : Singleton<LoadManager>
         InputManager.Instance.InputDisalbeAll();
 
         // 기본 Data Loading
+        DataManager.Instance.JsonLoad();
         await DataManager.Instance.LoadItemDataAsync(this.destroyCancellationToken);
         await DataManager.Instance.LoadMonsterDataAsync(this.destroyCancellationToken);
         await DataManager.Instance.LoadBulletDataAsync(this.destroyCancellationToken);
         await DataManager.Instance.LoadUIDataAsync(this.destroyCancellationToken);
+        await DataManager.Instance.LoadSoundDataAsync(this.destroyCancellationToken);
 
         await AssetManager.Instance.LoadAssetsByLabelAsync("UI", this.destroyCancellationToken);
         await AssetManager.Instance.LoadAssetsByLabelAsync("Monster", this.destroyCancellationToken);
 
+        // 초기 생성 및 연동
         UIManager.Instance.InitGlobalCanvas();
+        SoundManager.Instance.InitVolume(DataManager.Instance.Data);
 
         // 입력을 푼다.
         InputManager.Instance.InputEnableAll();
@@ -128,15 +132,19 @@ public class LoadManager : Singleton<LoadManager>
         // 1. Scene에 필요한 로딩을 모두 한다.
         List<string> uIList = await AssetManager.Instance.LoadAssetsByLabelAsync($"{name}UI", this.destroyCancellationToken);
         List<string> gameList = await AssetManager.Instance.LoadAssetsByLabelAsync($"{name}Game", this.destroyCancellationToken);
+        List<string> soundList = await AssetManager.Instance.LoadAssetsByLabelAsync($"{name}Sound", this.destroyCancellationToken);
 
         // 2. 처음부터 존재하는 객체는 만든다.
         GameManager.Instance.OnSceneLoadedCreate(gameList);
         UIManager.Instance.OnSceneLoadedCreate(uIList);
+        SoundManager.Instance.OnSceneLoadCreate(soundList);
         PoolManager.Instance.OnSceneLoadCreate();
+        
 
         // 3. 초기화한다.(외부참조, 이벤트구독)
         UIManager.Instance.OnSceneLoadedInit();
         GameManager.Instance.OnSceneLoadedInit();
+        SoundManager.Instance.OnSceneLoadedInit();
 
         // 4. 게임을 시작한다.
         InputManager.Instance.InputEnableAll();
@@ -151,6 +159,7 @@ public class LoadManager : Singleton<LoadManager>
         GameManager.Instance.OnSceneUnLoadDestroy();
         UIManager.Instance.OnSceneUnLoadDestroy();
         PoolManager.Instance.OnSceneUnLoadDestroy();
+        SoundManager.Instance.OnSceneUnLoadDestroy();
 
         // 2. UnLoad 한다.
         AssetManager.Instance.UnloadByLabel($"{name}UI");

@@ -232,6 +232,15 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SettingUI"",
+                    ""type"": ""Button"",
+                    ""id"": ""9ebcac60-7bd6-4c8e-9a09-f368ebb2e24d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -243,6 +252,17 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": "";PC"",
                     ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a7321da0-47de-4768-a08c-aeedd3147f74"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";PC"",
+                    ""action"": ""SettingUI"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -277,6 +297,7 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
         // GameUI
         m_GameUI = asset.FindActionMap("GameUI", throwIfNotFound: true);
         m_GameUI_Inventory = m_GameUI.FindAction("Inventory", throwIfNotFound: true);
+        m_GameUI_SettingUI = m_GameUI.FindAction("SettingUI", throwIfNotFound: true);
     }
 
     ~@PlayerInputSystem()
@@ -488,6 +509,7 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
     private readonly InputActionMap m_GameUI;
     private List<IGameUIActions> m_GameUIActionsCallbackInterfaces = new List<IGameUIActions>();
     private readonly InputAction m_GameUI_Inventory;
+    private readonly InputAction m_GameUI_SettingUI;
     /// <summary>
     /// Provides access to input actions defined in input action map "GameUI".
     /// </summary>
@@ -503,6 +525,10 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "GameUI/Inventory".
         /// </summary>
         public InputAction @Inventory => m_Wrapper.m_GameUI_Inventory;
+        /// <summary>
+        /// Provides access to the underlying input action "GameUI/SettingUI".
+        /// </summary>
+        public InputAction @SettingUI => m_Wrapper.m_GameUI_SettingUI;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -532,6 +558,9 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
             @Inventory.started += instance.OnInventory;
             @Inventory.performed += instance.OnInventory;
             @Inventory.canceled += instance.OnInventory;
+            @SettingUI.started += instance.OnSettingUI;
+            @SettingUI.performed += instance.OnSettingUI;
+            @SettingUI.canceled += instance.OnSettingUI;
         }
 
         /// <summary>
@@ -546,6 +575,9 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
             @Inventory.started -= instance.OnInventory;
             @Inventory.performed -= instance.OnInventory;
             @Inventory.canceled -= instance.OnInventory;
+            @SettingUI.started -= instance.OnSettingUI;
+            @SettingUI.performed -= instance.OnSettingUI;
+            @SettingUI.canceled -= instance.OnSettingUI;
         }
 
         /// <summary>
@@ -642,5 +674,12 @@ public partial class @PlayerInputSystem: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInventory(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "SettingUI" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSettingUI(InputAction.CallbackContext context);
     }
 }

@@ -137,7 +137,10 @@ public class AssetManager : Singleton<AssetManager>
         {
             data.UnLoad(); 
             assetDic.Remove(key);
-            Debug.Log($"[AssetManager] Unloaded AssetData: {key}");
+        }
+        else
+        {
+            Debug.Log($"UnLoad Failed : {key}");
         }
     }
 
