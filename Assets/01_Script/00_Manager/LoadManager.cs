@@ -89,6 +89,10 @@ public class LoadManager : Singleton<LoadManager>
         // 입력을 막는다.
         InputManager.Instance.InputDisalbeAll();
 
+        // 필수 UI부터 로딩 (화면 가리기)
+        await AssetManager.Instance.LoadAssetsByLabelAsync("UI", this.destroyCancellationToken);
+        UIManager.Instance.InitGlobalCanvas();
+
         // 기본 Data Loading
         DataManager.Instance.JsonLoad();
         await DataManager.Instance.LoadItemDataAsync(this.destroyCancellationToken);
@@ -96,12 +100,9 @@ public class LoadManager : Singleton<LoadManager>
         await DataManager.Instance.LoadBulletDataAsync(this.destroyCancellationToken);
         await DataManager.Instance.LoadUIDataAsync(this.destroyCancellationToken);
         await DataManager.Instance.LoadSoundDataAsync(this.destroyCancellationToken);
-
-        await AssetManager.Instance.LoadAssetsByLabelAsync("UI", this.destroyCancellationToken);
         await AssetManager.Instance.LoadAssetsByLabelAsync("Monster", this.destroyCancellationToken);
 
         // 초기 생성 및 연동
-        UIManager.Instance.InitGlobalCanvas();
         SoundManager.Instance.InitVolume(DataManager.Instance.Data);
 
         // 입력을 푼다.
