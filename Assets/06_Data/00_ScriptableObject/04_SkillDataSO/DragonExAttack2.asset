@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: DragonExAttack2
   m_EditorClassIdentifier: 
   skillName: "\uB4DC\uB798\uACE4 \uCC0D\uAE30 \uACF5\uACA9"
-  coolTime: 10
+  coolTime: 7
+  firstCoolTime: 7
   mpCost: 0
   attackRange: 10
   startDelay: 1
@@ -22,4 +23,4 @@ MonoBehaviour:
   endDelay: 0.5
   attackRadius: 3
   upAnimTime: 0.6
-  upDelay: 1
+  upDelay: 0.3

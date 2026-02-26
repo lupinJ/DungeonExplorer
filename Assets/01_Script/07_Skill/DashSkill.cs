@@ -13,6 +13,9 @@ public class DashSkill : Skill
     {
         if (isRunning) return;
 
+        // ÄðÅ¸ÀÓ
+        if (CoolTime > 0)
+            return;
         // Mp ¼Ò¸ð
         if (stat.Mp < data.mpCost)
             return;

@@ -9,6 +9,7 @@ public class SkillDataSO : ScriptableObject
     public string skillName; // skill 이름
 
     public float coolTime; // 쿨타임
+    public float firstCoolTime; // 시작 쿨타임
     public int mpCost; // Mp 소모량
     public float attackRange; // 공격 사거리
 

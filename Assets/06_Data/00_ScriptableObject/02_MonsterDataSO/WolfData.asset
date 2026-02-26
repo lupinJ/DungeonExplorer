@@ -19,6 +19,6 @@ MonoBehaviour:
   stat:
     maxHp: 100
     maxMp: 100
-    atk: 10
+    atk: 20
     atk_range: 4
     speed: 4

@@ -17,8 +17,8 @@ MonoBehaviour:
   birthTime: 0.58
   ChaseRange: {x: 4, y: 16}
   stat:
-    maxHp: 500
+    maxHp: 800
     maxMp: 100
-    atk: 20
+    atk: 25
     atk_range: 4
     speed: 2

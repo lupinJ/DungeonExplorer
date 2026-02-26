@@ -110,7 +110,7 @@ public class Wolf : Monster
 
         movement.Dir = dir; // 이동
         anim.SetBool("IsMove", true);
-        return INode.State.Running; // 계속 추적 중임을 알림
+        return INode.State.Running; 
     }
 
     // [행동] 대기 
@@ -124,7 +124,7 @@ public class Wolf : Monster
     #endregion
 
     /// <summary>
-    /// 고블린 사망
+    /// 늑대 사망
     /// </summary>
     /// <param name="die"></param>
     public override void Die(bool die)
@@ -148,7 +148,7 @@ public class Wolf : Monster
         anim.SetBool("IsAttack", false);
         anim.SetBool("IsDead", true);
 
-        // 아이템 드랍, n초후 destroy() 필요
+        // n초후 destroy()
         DieAsync(2.0f, cts.Token).Forget();
     }
 }

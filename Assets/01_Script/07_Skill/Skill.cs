@@ -50,6 +50,13 @@ public abstract class Skill
         
         curCooltime = 0;
     }
+    public void InitCoolTime(CancellationToken ct)
+    {
+        if (data.firstCoolTime == 0f)
+            return;
+
+        SetCooltime(data.firstCoolTime, ct).Forget();
+    }
 
     public abstract UniTask Activate(Transform target, int value, CancellationToken ct);
     public virtual void Reset() { curCooltime = 0; }

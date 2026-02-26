@@ -17,12 +17,6 @@ MonoBehaviour:
     m_SerializedData: []
   m_GUID: be945c3c82d6b7042a3a9ba8a2bfca39
   m_SerializeEntries:
-  - m_GUID: 0c4aa6040b5be2a4cb9e3dea0bd71dc2
-    m_Address: Assets/06_Data/ScriptableObject/ItemDataSO/Sword.asset
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - ItemData
-    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1061368f8a0f9464da55b7f867e19f0c
     m_Address: Assets/05_Sound/22 - The Final of The Fantasy.wav
     m_ReadOnly: 0
@@ -37,7 +31,7 @@ MonoBehaviour:
     - GameSceneGame
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 1a008d618488e9d4a9fb1edee79a8062
-    m_Address: Assets/05_Sound/13 - Decisive Battle 1 - Don't Be Afraid.wav
+    m_Address: Assets/05_Sound/13 - Decisive Battle 1 - Do not Be Afraid.wav
     m_ReadOnly: 0
     m_SerializedLabels:
     - DungeonSceneSound

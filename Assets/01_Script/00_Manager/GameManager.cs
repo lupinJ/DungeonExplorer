@@ -12,8 +12,7 @@ public class GameManager : Singleton<GameManager>
     {
         InputManager.Instance.InputDisalbeAll();
 
-        // 眠啊荤噶贸府
-
+        // 荤噶贸府
         await UniTask.Delay(System.TimeSpan.FromSeconds(2.0f));
 
         InputManager.Instance.InputEnableAll();
@@ -56,14 +55,4 @@ public class GameManager : Singleton<GameManager>
         player?.Initialize();
     }
 
-#if UNITY_EDITOR
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            PoolManager.Instance.Instanciate(MonsterId.Dragon,
-            new MonsterArg { position = new Vector2(0f, 0f) });
-        }
-    }
-#endif
 }

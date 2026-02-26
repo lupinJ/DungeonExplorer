@@ -86,8 +86,12 @@ public class JumpAttack : Skill
         }
         finally
         {
-            var sprite = owner.GetComponent<SpriteRenderer>();
-            if (sprite != null) sprite.enabled = true;
+            if(owner != null)
+            {
+                var sprite = owner.GetComponent<SpriteRenderer>();
+                if (sprite != null) sprite.enabled = true;
+            }
+            
             isRunning = false;
         }
     }

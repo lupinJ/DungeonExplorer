@@ -110,7 +110,7 @@ public class Goblin : Monster
 
         movement.Dir = dir; // 이동
         anim.SetBool("IsMove", true); 
-        return INode.State.Running; // 계속 추적 중임을 알림
+        return INode.State.Running; 
     }
 
     // [행동] 대기 
@@ -148,37 +148,8 @@ public class Goblin : Monster
         anim.SetBool("IsAttack", false); 
         anim.SetBool("IsDead", true);
 
-        // 아이템 드랍, n초후 destroy() 필요
+        // n초후 destroy() 
         DieAsync(2.0f, cts.Token).Forget();
     }
 
-  
-
-#if UNITY_EDITOR
-    // 에디터 창에서 공격 범위를 그리는 코드
-    private void OnDrawGizmos()
-    {
-        if (Application.isPlaying)
-        {
-            // 실행 중일 때 계산된 실시간 범위 표시
-            Gizmos.color = Color.red;
-            //DrawRotatedBox(currentBoxCenter, boxSize, currentAngle);
-        }
-        else if (target != null)
-        {
-            Gizmos.color = Color.yellow;
-            //DrawRotatedBox(currentBoxCenter, boxSize, currentAngle);
-        }
-    }
-
-    private void DrawRotatedBox(Vector2 center, Vector2 size, float angle)
-    {
-        Matrix4x4 rotationMatrix = Matrix4x4.TRS(center, Quaternion.Euler(0, 0, angle), Vector3.one);
-        Gizmos.matrix = rotationMatrix;
-        Gizmos.DrawWireCube(Vector3.zero, new Vector3(size.x, size.y, 0.1f));
-        Gizmos.matrix = Matrix4x4.identity; // 매트릭스 초기화
-    }
-#endif
-
-    
 }

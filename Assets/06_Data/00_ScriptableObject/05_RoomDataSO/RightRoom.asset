@@ -19,10 +19,11 @@ MonoBehaviour:
   - position: {x: -4.5, y: 3.5}
     itemInfo:
       id: 1
-      count: 20
+      count: 5
       dropRate: 1
   - position: {x: -1.5, y: 3.5}
     itemInfo:
       id: 2
-      count: 20
+      count: 5
       dropRate: 1
+  portalData: []

@@ -15,13 +15,31 @@ MonoBehaviour:
   id: 2
   isEncount: 1
   spawnData:
-  - id: 1
-    localPosition: {x: 0, y: 0}
-  - id: 1
-    localPosition: {x: 0, y: 0}
   - id: 2
-    localPosition: {x: 0, y: 0}
+    localPosition: {x: 6, y: 1}
   - id: 2
-    localPosition: {x: 0, y: 0}
+    localPosition: {x: 6, y: -1}
+  - id: 1
+    localPosition: {x: 4, y: 2}
+  - id: 1
+    localPosition: {x: 4, y: 0}
+  - id: 1
+    localPosition: {x: 4, y: -2}
+  - id: 2
+    localPosition: {x: 0, y: 3}
+  - id: 2
+    localPosition: {x: 0, y: 1}
+  - id: 2
+    localPosition: {x: 0, y: -1}
+  - id: 2
+    localPosition: {x: 0, y: -3}
+  - id: 1
+    localPosition: {x: -3, y: 3}
+  - id: 1
+    localPosition: {x: -3, y: 1}
+  - id: 1
+    localPosition: {x: -3, y: -1}
+  - id: 1
+    localPosition: {x: -3, y: -3}
   boxData: []
   portalData: []

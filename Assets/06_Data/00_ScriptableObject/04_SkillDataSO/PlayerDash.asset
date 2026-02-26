@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: PlayerDash
   m_EditorClassIdentifier: 
   skillName: "\uD50C\uB808\uC774\uC5B4 \uB300\uC26C"
-  coolTime: 0
-  mpCost: 10
+  coolTime: 0.5
+  firstCoolTime: 0
+  mpCost: 5
   attackRange: 12
   startDelay: 0
   animTime: 0.2
+  attackTime: 0
   endDelay: 0.05

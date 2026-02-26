@@ -3,17 +3,19 @@
 public static class AddressKeys
 {
 
-    public static readonly string Sword = "Assets/06_Data/ScriptableObject/ItemDataSO/Sword.asset";
-
     public static readonly string _22___The_Final_of_The_Fantasy = "Assets/05_Sound/22 - The Final of The Fantasy.wav";
 
     public static readonly string DropItem = "Assets/02_Prefab/Item/DropItem.prefab";
+
+    public static readonly string _13___Decisive_Battle_1___Do_not_Be_Afraid = "Assets/05_Sound/13 - Decisive Battle 1 - Do not Be Afraid.wav";
 
     public static readonly string Player = "Assets/02_Prefab/00_Player/Player.prefab";
 
     public static readonly string FireBall = "Assets/02_Prefab/07_Bullet/FireBall.prefab";
 
     public static readonly string GameStartButton = "Assets/02_Prefab/01_UI/GameStartButton.prefab";
+
+    public static readonly string InGameSettingPanelUI = "Assets/02_Prefab/01_UI/InGameSettingPanelUI.prefab";
 
     public static readonly string UIMappingTable = "Assets/06_Data/00_ScriptableObject/03_Mappping/UIMappingTable.asset";
 
@@ -43,8 +45,6 @@ public static class AddressKeys
 
     public static readonly string Door = "Assets/02_Prefab/05_Object/Door.prefab";
 
-    public static readonly string _14___Tales_of_Firelight_Town = "Assets/05_Sound/14 - Tales of Firelight Town.wav";
-
     public static readonly string _05___Battle_1 = "Assets/05_Sound/05 - Battle 1.wav";
 
     public static readonly string SettingButton = "Assets/02_Prefab/01_UI/SettingButton.prefab";
@@ -55,6 +55,8 @@ public static class AddressKeys
 
     public static readonly string None = "Assets/06_Data/ScriptableObject/ItemDataSO/None.asset";
 
+    public static readonly string SoundObject = "Assets/02_Prefab/08_Sound/SoundObject.prefab";
+
     public static readonly string GlobalCanvas = "Assets/02_Prefab/01_UI/GlobalCanvas.prefab";
 
     public static readonly string Goblin = "Assets/02_Prefab/03_Monster/Goblin.prefab";
@@ -64,7 +66,5 @@ public static class AddressKeys
     public static readonly string SettingPanelUI = "Assets/02_Prefab/01_UI/SettingPanelUI.prefab";
 
     public static readonly string ManaPotion = "Assets/06_Data/00_ScriptableObject/00_ItemDataSO/01_Potion/ManaPotion.asset";
-
-    public static readonly string SoundObject = "Assets/02_Prefab/08_Sound/SoundObject.prefab";
 
 }

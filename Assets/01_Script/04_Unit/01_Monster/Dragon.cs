@@ -45,6 +45,7 @@ public class Dragon : Monster
         await UniTask.Delay(TimeSpan.FromSeconds(data.birthTime), cancellationToken: ct);
 
         anim.SetBool("IsDown", false);
+        jumpSkill.InitCoolTime(ct);
 
         await UniTask.NextFrame(ct);
         SoundManager.Instance.PlayBgm(SoundId.BossBgm);
@@ -120,7 +121,7 @@ public class Dragon : Monster
         else
             sprite.flipX = false;
 
-        await jumpSkill.Activate(target, stat.Atk, ct);
+        await jumpSkill.Activate(target, stat.Atk * 2, ct);
         return INode.State.Success;
     }
 
@@ -203,7 +204,7 @@ public class Dragon : Monster
             sprite.flipX = false;
 
         movement.Dir = dir; // 이동
-        return INode.State.Running; // 계속 추적 중임을 알림
+        return INode.State.Running; 
     }
 
     // [행동] 대기 
@@ -239,7 +240,7 @@ public class Dragon : Monster
         // 배경음악 처리
         SoundManager.Instance.PlayMainBgm();
 
-        // 아이템 드랍, n초후 destroy() 필요
+        // n초후 destroy()
         DieAsync(2.0f, cts.Token).Forget();
     }
 
