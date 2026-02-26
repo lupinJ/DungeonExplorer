@@ -8,10 +8,6 @@ using UnityEngine;
 [System.Serializable]
 public class SaveData
 {
-    // 인벤토리
-    public List<ItemId> items;
-    public int coin;
-
     // 볼륨
     public float bgmVolume;
     public float sfxVolume;
@@ -107,12 +103,6 @@ public class DataManager : Singleton<DataManager>
 
         if (!File.Exists(path))
         {
-            this.saveData.items = new List<ItemId>(maxInventory);
-
-            for (int i = 0; i < maxInventory; i++)
-                this.saveData.items.Add(ItemId.None);
-
-            this.saveData.coin = 0;
             this.saveData.bgmVolume = 0.5f;
             this.saveData.sfxVolume = 0.5f;
 

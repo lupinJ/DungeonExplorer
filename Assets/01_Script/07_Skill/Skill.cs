@@ -21,7 +21,7 @@ public abstract class Skill
     protected Movement movement; // 주체 움직임
     protected Stat stat; // 주체 스텟
 
-    protected List<Transform> indicator; // 공격 표시
+    protected List<Transform> indicators; // 공격 표시
     protected List<SpriteRenderer> indicatorRenderer; // 색 or 투명도 조절
 
     protected float curCooltime; // 현재 쿨타임
@@ -38,12 +38,13 @@ public abstract class Skill
         anim = owner.GetComponent<Animator>();
         movement = ctx.movement;
         stat = ctx.stat;
-        indicator = ctx.indicator;
-        if(indicator != null)
+
+        indicators = ctx.indicator;
+        if(indicators != null)
         {
             indicatorRenderer = new List<SpriteRenderer>();
-            for (int i = 0; i < indicator.Count; i++)
-                indicatorRenderer.Add(indicator[i].GetComponent<SpriteRenderer>());
+            for (int i = 0; i < indicators.Count; i++)
+                indicatorRenderer.Add(indicators[i].GetComponent<SpriteRenderer>());
         }
         
         curCooltime = 0;
@@ -68,6 +69,19 @@ public abstract class Skill
                 break;
             }
             await UniTask.NextFrame(ct);
+        }
+    }
+
+    protected void IndicatorOffAll()
+    {
+        if (indicators == null) return;
+
+        foreach (var obj in indicators)
+        {
+            if (obj != null)
+            {
+                obj.gameObject.SetActive(false);
+            }
         }
     }
 }

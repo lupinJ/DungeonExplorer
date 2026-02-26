@@ -9,6 +9,9 @@ public class SoundComponent : MonoBehaviour, IPoolable
     AudioSource audioSource;
     CancellationTokenSource cts;
 
+    public bool IsPlaying => audioSource.isPlaying;
+    public string Name => audioSource.clip.name;
+
     public float Volume
     {
         get {  return audioSource.volume; }

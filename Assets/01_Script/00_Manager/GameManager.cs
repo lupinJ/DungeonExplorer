@@ -64,18 +64,6 @@ public class GameManager : Singleton<GameManager>
             PoolManager.Instance.Instanciate(MonsterId.Dragon,
             new MonsterArg { position = new Vector2(0f, 0f) });
         }
-        if(Input.GetKeyDown(KeyCode.Alpha1))
-        {
-            LoadManager.Instance.LoadSceneAsync("GameScene");
-        }
-        if(Input.GetKeyDown(KeyCode.Alpha2))
-        {
-            LoadManager.Instance.LoadSceneAsync("DungeonScene");
-        }
-        if (Input.GetKeyDown(KeyCode.Alpha3))
-        {
-            LoadManager.Instance.LoadSceneAsync("StartScene");
-        }
     }
 #endif
 }

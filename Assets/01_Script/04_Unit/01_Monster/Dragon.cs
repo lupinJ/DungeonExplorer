@@ -12,6 +12,8 @@ public class Dragon : Monster
     [Header("Dragon Extra Skill")]
     [SerializeField] private SkillDataSO jumpSkillData;
     [SerializeField] private SkillDataSO RoundSkillData;
+    [Header("Indicator")]
+    [SerializeField] private List<Transform> indicators;
 
     Skill jumpSkill;
     Skill roundSkill;
@@ -20,6 +22,7 @@ public class Dragon : Monster
     {
         base.Awake();
         skill = new RangedAttack(skillData, new SkillContext { owner = this, indicator = new List<Transform> { indicator } });
+        roundSkill = new RoundAttack(RoundSkillData, new SkillContext { owner = this, indicator = indicators });
         BuildBT();
     }
 
@@ -42,7 +45,9 @@ public class Dragon : Monster
 
         anim.SetBool("IsDown", false);
 
+        await UniTask.NextFrame(ct);
         SoundManager.Instance.PlayBgm(SoundId.BossBgm);
+
         FixedMoveAsync(ct).Forget();
         RunBTRoutine(ct).Forget();
     }
@@ -52,6 +57,12 @@ public class Dragon : Monster
     /// </summary>
     protected override void BuildBT()
     {
+        // Ex1 공격 시퀀스: 사거리 체크 -> 쿨차임 체크 -> 공격 실행
+        var ex1AttackSequence = new SequenceNode();
+        ex1AttackSequence.Add(new ActionNode(CheckEx1AttackRange));
+        ex1AttackSequence.Add(new ActionNode(CheckEx1AttackCoolTime));
+        ex1AttackSequence.Add(new ActionNode(DoEx1AttackAction));
+
         // 공격 시퀀스: 사거리 체크 -> 쿨차임 체크 -> 공격 실행
         var attackSequence = new SequenceNode();
         attackSequence.Add(new ActionNode(CheckAttackRange));
@@ -65,6 +76,7 @@ public class Dragon : Monster
 
         // 루트 선택: 공격 > 추적 > 대기
         var selector = new SelectorNode();
+        selector.Add(ex1AttackSequence);
         selector.Add(attackSequence);
         selector.Add(chaseSequence);
         selector.Add(new ActionNode(DoIdleAction));
@@ -74,6 +86,36 @@ public class Dragon : Monster
 
     #region BT Action Methods
 #pragma warning disable CS1998
+    // [조건] 원형 공격 사거리 확인
+    private async UniTask<INode.State> CheckEx1AttackRange(CancellationToken ct)
+    {
+        if (target == null) return INode.State.Failure;
+        float dist = Vector2.Distance(transform.position, target.position);
+        return dist <= roundSkill.AttackRange ? INode.State.Success : INode.State.Failure;
+    }
+
+    // [조건] 원형 공격 쿨타임 확인
+    private async UniTask<INode.State> CheckEx1AttackCoolTime(CancellationToken ct)
+    {
+        if (target == null) return INode.State.Failure;
+        return roundSkill.CoolTime == 0 ? INode.State.Success : INode.State.Failure;
+    }
+
+    // [행동] 실제 원형 공격 프로세스
+    private async UniTask<INode.State> DoEx1AttackAction(CancellationToken ct)
+    {
+        movement.Dir = Vector2.zero; // 공격 시 정지
+        Vector2 dir = (target.position - transform.position).normalized;
+
+        if (dir.x < 0)
+            sprite.flipX = true;
+        else
+            sprite.flipX = false;
+
+        await roundSkill.Activate(target, stat.Atk, ct);
+        return INode.State.Success;
+    }
+
     // [조건] 공격 사거리 확인
     private async UniTask<INode.State> CheckAttackRange(CancellationToken ct)
     {
@@ -82,6 +124,7 @@ public class Dragon : Monster
         return dist <= skill.AttackRange ? INode.State.Success : INode.State.Failure;
     }
 
+    // [조건] 공격 쿨타임 확인
     private async UniTask<INode.State> CheckAttackCoolTime(CancellationToken ct)
     {
         if (target == null) return INode.State.Failure;
