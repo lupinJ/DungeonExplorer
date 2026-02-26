@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class RoundAttack : Skill
 {
-    private RoundAttackSO rData; // 기존 데이터 구조 재활용 또는 전용 SO 사용
+    private RoundAttackSO rData; 
 
     public RoundAttack(SkillDataSO data, SkillContext ctx) : base(data, ctx)
     {
@@ -47,7 +47,7 @@ public class RoundAttack : Skill
             await UniTask.Delay(TimeSpan.FromSeconds(rData.startDelay), cancellationToken: ct);
 
             // 3. 애니메이션 및 인디케이터 정리
-            ShowAnim(rData.animTime, ct).Forget();
+            ShowAnim("IsAttack", rData.animTime, ct).Forget();
             IndicatorOffAll();
 
             await UniTask.Delay(TimeSpan.FromSeconds(rData.attackTime), cancellationToken: ct);
@@ -80,17 +80,6 @@ public class RoundAttack : Skill
             isRunning = false;
         }
     }
-
-    private async UniTaskVoid ShowAnim(float animTime, CancellationToken ct)
-    {
-        anim.SetBool("IsAttack", true);
-
-        await UniTask.Delay(TimeSpan.FromSeconds(animTime), cancellationToken: ct).SuppressCancellationThrow();
-
-        if (anim != null) anim.SetBool("IsAttack", false);
-    }
-
-    
 
     private void CleanUp()
     {

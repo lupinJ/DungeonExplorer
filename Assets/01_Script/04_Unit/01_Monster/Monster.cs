@@ -114,7 +114,14 @@ public abstract class Monster : Unit,
         Die(true);
     }
 
-    
+    public void SetHpBarActive(bool active)
+    {
+        if (hpBar == null)
+            return;
+        if (hpBar.gameObject == null)
+            return;
+        hpBar.gameObject.SetActive(active);
+    }
 
     public void OnSpawn()
     {
@@ -146,7 +153,7 @@ public abstract class Monster : Unit,
         OnDespawn();
     }
 
-    private void OnDestroy()
+    protected virtual void OnDestroy()
     {
         skill = null;
     }

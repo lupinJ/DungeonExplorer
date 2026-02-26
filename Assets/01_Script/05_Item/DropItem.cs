@@ -56,10 +56,6 @@ public class DropItem : MonoBehaviour, IInItable, IInteractable
         sprite = GetComponent<SpriteRenderer>();
     }
 
-    private void OnEnable()
-    {
-        
-    }
     private void OnDisable()
     {
         cts?.Cancel();

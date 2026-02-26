@@ -23,6 +23,7 @@ public class Dragon : Monster
         base.Awake();
         skill = new RangedAttack(skillData, new SkillContext { owner = this, indicator = new List<Transform> { indicator } });
         roundSkill = new RoundAttack(RoundSkillData, new SkillContext { owner = this, indicator = indicators });
+        jumpSkill = new JumpAttack(jumpSkillData, new SkillContext { owner= this, stat = stat, indicator = new List<Transform> { indicators[6] } });
         BuildBT();
     }
 
@@ -57,6 +58,12 @@ public class Dragon : Monster
     /// </summary>
     protected override void BuildBT()
     {
+        // Ex2 공격 시퀀스: 사거리 체크 -> 쿨차임 체크 -> 공격 실행
+        var ex2AttackSequence = new SequenceNode();
+        ex2AttackSequence.Add(new ActionNode(CheckEx2AttackRange));
+        ex2AttackSequence.Add(new ActionNode(CheckEx2AttackCoolTime));
+        ex2AttackSequence.Add(new ActionNode(DoEx2AttackAction));
+
         // Ex1 공격 시퀀스: 사거리 체크 -> 쿨차임 체크 -> 공격 실행
         var ex1AttackSequence = new SequenceNode();
         ex1AttackSequence.Add(new ActionNode(CheckEx1AttackRange));
@@ -76,6 +83,7 @@ public class Dragon : Monster
 
         // 루트 선택: 공격 > 추적 > 대기
         var selector = new SelectorNode();
+        selector.Add(ex2AttackSequence);
         selector.Add(ex1AttackSequence);
         selector.Add(attackSequence);
         selector.Add(chaseSequence);
@@ -86,6 +94,36 @@ public class Dragon : Monster
 
     #region BT Action Methods
 #pragma warning disable CS1998
+    // [조건] 찍기 공격 사거리 확인
+    private async UniTask<INode.State> CheckEx2AttackRange(CancellationToken ct)
+    {
+        if (target == null) return INode.State.Failure;
+        float dist = Vector2.Distance(transform.position, target.position);
+        return dist <= jumpSkill.AttackRange ? INode.State.Success : INode.State.Failure;
+    }
+
+    // [조건] 찍기 공격 쿨타임 확인
+    private async UniTask<INode.State> CheckEx2AttackCoolTime(CancellationToken ct)
+    {
+        if (target == null) return INode.State.Failure;
+        return jumpSkill.CoolTime == 0 ? INode.State.Success : INode.State.Failure;
+    }
+
+    // [행동] 실제 찍기 공격 프로세스
+    private async UniTask<INode.State> DoEx2AttackAction(CancellationToken ct)
+    {
+        movement.Dir = Vector2.zero; // 공격 시 정지
+        Vector2 dir = (target.position - transform.position).normalized;
+
+        if (dir.x < 0)
+            sprite.flipX = true;
+        else
+            sprite.flipX = false;
+
+        await jumpSkill.Activate(target, stat.Atk, ct);
+        return INode.State.Success;
+    }
+
     // [조건] 원형 공격 사거리 확인
     private async UniTask<INode.State> CheckEx1AttackRange(CancellationToken ct)
     {
@@ -203,6 +241,13 @@ public class Dragon : Monster
 
         // 아이템 드랍, n초후 destroy() 필요
         DieAsync(2.0f, cts.Token).Forget();
+    }
+
+    protected override void OnDestroy()
+    {
+        base.OnDestroy();
+        jumpSkill = null;
+        roundSkill = null;
     }
 
 }

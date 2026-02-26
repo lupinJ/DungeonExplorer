@@ -53,7 +53,7 @@ public class MeleeAttack : Skill
             await UniTask.Delay(TimeSpan.FromSeconds(mData.startDelay), cancellationToken: ct);
 
             // 애니메이션 실행
-            ShowAnim(mData.animTime, ct).Forget();
+            ShowAnim("IsAttack", mData.animTime, ct).Forget();
             indicators[0].gameObject.SetActive(false); // 인디케이터 비활성화
 
             await UniTask.Delay(TimeSpan.FromSeconds(mData.attackTime), cancellationToken: ct);
@@ -100,17 +100,5 @@ public class MeleeAttack : Skill
                 hitable.Hit(atk);
             }
         }
-    }
-
-    private async UniTaskVoid ShowAnim(float animTime, CancellationToken ct)
-    {
-        // 애니메이션 실행
-        anim.SetBool("IsAttack", true); 
-
-        await UniTask.Delay(TimeSpan.FromSeconds(animTime), cancellationToken: ct).SuppressCancellationThrow();
-
-        // 애니메이션 종료
-        if (anim != null)
-            anim.SetBool("IsAttack", false); 
     }
 }

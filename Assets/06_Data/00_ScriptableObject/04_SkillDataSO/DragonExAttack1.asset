@@ -19,7 +19,7 @@ MonoBehaviour:
   startDelay: 0.4
   animTime: 0.8
   attackTime: 0.5
-  endDelay: 0.1
+  endDelay: 0.5
   id: 2
   count: 12
   speed: 6

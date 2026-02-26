@@ -14,6 +14,8 @@ public abstract class Weapon : MonoBehaviour, IInItable
     WeaponItem item;
     protected bool isAttack;
 
+    public bool IsAttack => isAttack;
+
     public WeaponItem Item
     {
         get
@@ -23,7 +25,10 @@ public abstract class Weapon : MonoBehaviour, IInItable
         protected set { item = value; }
     }
 
-    public bool IsAttack => isAttack;
+    private void Awake()
+    {
+        sprite = GetComponent<SpriteRenderer>();
+    }
 
     public abstract void Attack();
 
@@ -35,10 +40,4 @@ public abstract class Weapon : MonoBehaviour, IInItable
         float x = Mathf.Abs(transform.localPosition.x);
         transform.localPosition = flip ? new Vector2(-x, transform.localPosition.y) : new Vector2(x, transform.localPosition.y);
     }
-
-    private void Awake()
-    {
-        sprite = GetComponent<SpriteRenderer>();
-    }
-
 }

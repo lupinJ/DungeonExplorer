@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: StartRoom
   m_EditorClassIdentifier: 
   id: 0
+  isEncount: 0
   spawnData: []
   boxData:
   - position: {x: 0, y: -3}
     itemInfo:
-      id: 4
+      id: 3
       count: 1
       dropRate: 1
+  portalData: []

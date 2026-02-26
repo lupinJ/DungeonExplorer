@@ -8,8 +8,7 @@ public enum ItemId
     None,
     HealthPotion,
     ManaPotion,
-    Sword,
-    Katana
+    Katana,
 }
 
 [System.Serializable]
@@ -20,20 +19,12 @@ public struct ItemDropInfo
 
     [Range(0f, 1f)]
     public float dropRate;
-
-    ItemDropInfo(ItemId id, int count = 1, float dropRate = 1f)
-    {
-        this.id = id;
-        this.count = count;
-        this.dropRate = dropRate;
-    }
 }
 public static class ItemFactory
 {
     private static readonly Dictionary<ItemId, Func<Item>> ItemCreators = new()
     {
         { ItemId.None, () => new Item() },
-        { ItemId.Sword, () => new Item() },
         { ItemId.Katana, () => new WeaponItem() },
         { ItemId.HealthPotion, () => new HealthPotion() },
         { ItemId.ManaPotion, () => new ManaPotion() },
@@ -63,7 +54,6 @@ public static class ItemFactory
         {
             Item item = creator.Invoke();
 
-            // 데이터(SO) 연결 로직 (DataManager 등 활용)
             if (DataManager.Instance.TryGetItemData(info.id, out var data))
             {
                 item.Initialize(new ItemArg { itemDataSO = data, count = info.count });

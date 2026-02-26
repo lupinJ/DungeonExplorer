@@ -852,7 +852,7 @@ MonoBehaviour:
   skillData: {fileID: 11400000, guid: d59ed504c1bb07a46aadb07d437106e0, type: 2}
   hpBar: {fileID: 1994529875514212599}
   indicator: {fileID: 969524101560828551}
-  jumpSkillData: {fileID: 0}
+  jumpSkillData: {fileID: 11400000, guid: eaa2d7cbf0d071948a8df46fa9e3d085, type: 2}
   RoundSkillData: {fileID: 11400000, guid: 4c2089137e7f14b4ebed6c28aa7a3239, type: 2}
   indicators:
   - {fileID: 969524101560828551}

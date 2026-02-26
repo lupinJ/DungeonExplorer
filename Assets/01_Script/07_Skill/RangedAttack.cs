@@ -42,7 +42,7 @@ public class RangedAttack : Skill
             await UniTask.Delay(TimeSpan.FromSeconds(rData.startDelay), cancellationToken: ct);
 
             // 애니메이션 실행
-            ShowAnim(rData.animTime, ct).Forget();
+            ShowAnim("IsAttack", rData.animTime, ct).Forget();
             indicators[0].gameObject.SetActive(false); // 인디케이터 비활성화
 
             await UniTask.Delay(TimeSpan.FromSeconds(rData.attackTime), cancellationToken: ct);
@@ -73,15 +73,5 @@ public class RangedAttack : Skill
         {
             isRunning = false;
         }
-    }
-
-    private async UniTaskVoid ShowAnim(float animTime, CancellationToken ct)
-    {
-        anim.SetBool("IsAttack", true); // 애니메이션 실행
-
-        await UniTask.Delay(TimeSpan.FromSeconds(animTime), cancellationToken: ct).SuppressCancellationThrow();
-        if (anim == null) return;
-
-        anim.SetBool("IsAttack", false); // 애니메이션 종료
     }
 }

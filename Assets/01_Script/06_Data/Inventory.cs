@@ -9,8 +9,7 @@ public class Inventory
     InventoryChangedEvent inventoryChangedEvent;
 
     public List<Item> items; // 아이템
-    int capacity; // 총 공간
-    ItemDataSO none; // 빈 공간 처리용
+    readonly int maxInventory = 24;
 
     public Inventory()
     {
@@ -18,19 +17,18 @@ public class Inventory
         inventoryChangedEvent = new InventoryChangedEvent();
 
         EventManager.Instance.AddEvent<InventoryChangedEvent>(inventoryChangedEvent);
-        FillInventory(null);
+        FillInventory();
     }
 
     public void Reset()
     {
         EventManager.Instance.RemoveEvent<InventoryChangedEvent>();
     }
-    public void FillInventory(List<ItemId> list)
+    public void FillInventory()
     {
-        // item Test Data(추후 수정)
         items.Clear();
 
-        for (int i = 0; i < 24; i++)
+        for (int i = 0; i < maxInventory; i++)
             items.Add(ItemFactory.CreateItem(ItemId.None));
     }
 

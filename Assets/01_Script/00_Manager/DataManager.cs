@@ -18,7 +18,6 @@ public class DataManager : Singleton<DataManager>
     string path;
     [SerializeField]
     SaveData saveData;
-    readonly int maxInventory = 24; 
 
     Dictionary<ItemId, ItemDataSO> itemTable = new();
     Dictionary<MonsterId, string> monsterPathTable = new();

@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
@@ -70,6 +71,16 @@ public abstract class Skill
             }
             await UniTask.NextFrame(ct);
         }
+    }
+    protected async UniTaskVoid ShowAnim(string name, float animTime, CancellationToken ct)
+    {
+        if (anim == null) return;
+
+        anim.SetBool(name, true);
+
+        await UniTask.Delay(TimeSpan.FromSeconds(animTime), cancellationToken: ct).SuppressCancellationThrow();
+
+        if (anim != null) anim.SetBool(name, false);
     }
 
     protected void IndicatorOffAll()
