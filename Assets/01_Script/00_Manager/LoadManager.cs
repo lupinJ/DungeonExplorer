@@ -34,25 +34,25 @@ public class LoadManager : Singleton<LoadManager>
 
         try
         {
-            // 0. 입력 차단
+            // 입력 차단
             InputManager.Instance.InputDisalbeAll();
 
-            // 1. Fade In (검은 화면으로)
+            // Fade In (검은 화면으로)
             await UIManager.Instance.DoFade(1.0f, 0.5f); // (목표 알파값, 지속시간)
 
-            // 2. 기존 씬 정리 (Unloading)
+            // 기존 씬 정리 (Unloading)
             UnLoading(SceneManager.GetActiveScene().name);
 
-            // 3. 비동기 씬 전환
+            // 비동기 씬 전환
             await SceneManager.LoadSceneAsync(name).ToUniTask();
 
-            // 4. 새로운 씬 로딩 로직 실행
+            // 새로운 씬 로딩 로직 실행
             await Loading(name);
 
-            // 5. Fade Out (다시 화면 보이게)
+            // Fade Out (다시 화면 보이게)
             await UIManager.Instance.DoFade(0.0f, 0.5f);
 
-            // 6. 입력 복구
+            // 입력 복구
             InputManager.Instance.InputEnableAll();
         }
         finally
@@ -60,12 +60,6 @@ public class LoadManager : Singleton<LoadManager>
             isSceneLoading = false; 
         }
         
-    }
-
-    public void LoadScene(string name)
-    {
-        UnLoading(SceneManager.GetActiveScene().name);
-        SceneManager.LoadScene(name);
     }
 
     private void OnFirstLoaded(Scene scene, LoadSceneMode mode)

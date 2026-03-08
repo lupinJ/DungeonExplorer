@@ -19,3 +19,5 @@ MonoBehaviour:
     path: Assets/02_Prefab/03_Monster/Wolf.prefab
   - id: 3
     path: Assets/02_Prefab/03_Monster/Dragon.prefab
+  - id: 0
+    path: Assets/02_Prefab/03_Monster/Dragon.prefab

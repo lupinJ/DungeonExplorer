@@ -47,7 +47,6 @@ public class SelectorNode : CompositeNode
     }
 }
 
-// Sequence: 모든 자식이 Success여야 성공 (AND 조건)
 public class SequenceNode : CompositeNode
 {
     public override async UniTask<INode.State> Evaluate(CancellationToken ct)

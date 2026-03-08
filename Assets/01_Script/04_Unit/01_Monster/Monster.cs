@@ -137,7 +137,6 @@ public abstract class Monster : Unit,
         stat.onDie += OnMonsterDie;
         
     }
-
     public void OnDespawn()
     {
         cts?.Cancel();
@@ -152,7 +151,6 @@ public abstract class Monster : Unit,
     {
         OnDespawn();
     }
-
     protected virtual void OnDestroy()
     {
         skill = null;
